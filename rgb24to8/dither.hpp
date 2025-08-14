@@ -111,12 +111,9 @@ namespace dither
 			int R_diffuse = error.R * numerator / denominator;
 			int G_diffuse = error.G * numerator / denominator;
 			int B_diffuse = error.B * numerator / denominator;
-			target = Pixel
-			{
-				static_cast<uint8_t>(std::max(std::min(static_cast<int>(target.R) + R_diffuse, 255), 0)),
-				static_cast<uint8_t>(std::max(std::min(static_cast<int>(target.G) + G_diffuse, 255), 0)),
-				static_cast<uint8_t>(std::max(std::min(static_cast<int>(target.B) + B_diffuse, 255), 0)),
-			};
+			target.R = static_cast<uint8_t>(std::max(std::min(static_cast<int>(target.R) + R_diffuse, 255), 0));
+			target.G = static_cast<uint8_t>(std::max(std::min(static_cast<int>(target.G) + G_diffuse, 255), 0));
+			target.B = static_cast<uint8_t>(std::max(std::min(static_cast<int>(target.B) + B_diffuse, 255), 0));
 		}
 
 		template<Rgb_c Pixel>
