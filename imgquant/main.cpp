@@ -3,6 +3,7 @@
 #include <rgb24to8/rgb24to8.hpp>
 
 #include <iostream>
+#include <cstring>
 
 namespace rgb24to8
 {
