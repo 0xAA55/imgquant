@@ -67,7 +67,8 @@ namespace pngcpp
 		uint32_t get_width() const;
 		uint32_t get_height() const;
 
-		const Pixel * const* get_row_pointers() const;
+		Pixel **get_row_pointers();
+		const Pixel *const *get_row_pointers() const;
 		const Pixel &get_pixel(uint32_t x, uint32_t y) const;
 		Pixel &get_pixel(uint32_t x, uint32_t y);
 		void set_pixel(uint32_t x, uint32_t y, const Pixel& pixel);

@@ -144,6 +144,10 @@ namespace pngcpp
 	{
 		return height;
 	}
+	Pixel **PngImage::get_row_pointers()
+	{
+		return &row_pointers[0];
+	}
 	const Pixel *const *PngImage::get_row_pointers() const
 	{
 		return &row_pointers[0];
