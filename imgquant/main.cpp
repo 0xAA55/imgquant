@@ -21,9 +21,9 @@ namespace rgb24to8
 
         auto src_png = PngImage(src_png_path);
         std::vector<uint8_t> bitmap_out;
-        std::vector<Rgb> palette_out;
+        std::vector<Color24> palette_out;
         std::vector<uint8_t *> bitmap_row_pointers;
-        rgb24to8(src_png.get_width(), src_png.get_height(), reinterpret_cast<const Rgba *const *>(src_png.get_row_pointers()), bitmap_out, palette_out, &bitmap_row_pointers);
+        rgb24to8(src_png.get_width(), src_png.get_height(), reinterpret_cast<Color32 **>(src_png.get_row_pointers()), bitmap_out, palette_out, &bitmap_row_pointers);
 
 #ifndef _DEBUG
         try
