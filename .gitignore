@@ -8,3 +8,7 @@ lib/x64_Release/
 *.filters
 *.user
 testout.png
+quant
+imgquant/imgquant
+*.a
+*.o
