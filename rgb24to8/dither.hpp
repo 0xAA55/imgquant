@@ -79,7 +79,7 @@ namespace dither
 #pragma omp parallel for
 			for (ptrdiff_t y = 0; y < static_cast<ptrdiff_t>(height); y++)
 			{
-				auto row = row_pointers[y];
+				auto *row = row_pointers[y];
 				for (ptrdiff_t x = 0; x < static_cast<ptrdiff_t>(width); x++)
 				{
 
