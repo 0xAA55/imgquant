@@ -27,6 +27,8 @@ namespace rgb24to8
 			{
 				auto pix = row[x];
 				palette_gen.add_color(pix.R, pix.G, pix.B);
+				if (palette_gen.get_num_colors() >= 256)
+					palette_gen.reduce_color();
 			}
 		}
 
