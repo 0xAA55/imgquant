@@ -114,6 +114,9 @@ namespace pngcpp
 		for (size_t i = 0; i < pixels.size(); i++) pixels[i] = default_color;
 		for (size_t y = 0; y < height; y++) row_pointers.push_back(&pixels[y * width]);
 	}
+	PngImage::PngImage(const char *path) : PngImage(std::string(path))
+	{
+	}
 	PngImage::PngImage(const std::string &path)
 	{
 		png_image image = { 0 };

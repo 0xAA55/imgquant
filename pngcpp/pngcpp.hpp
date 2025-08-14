@@ -61,6 +61,7 @@ namespace pngcpp
 		PngImage(PngImage &&) = default;
 		PngImage(const PngImage &) = default;
 		PngImage(uint32_t width, uint32_t height, const Pixel& default_color);
+		PngImage(const char* path);
 		PngImage(const std::string& path);
 
 		uint32_t get_width() const;
