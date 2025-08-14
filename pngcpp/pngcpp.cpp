@@ -146,9 +146,9 @@ namespace pngcpp
 	{
 		return height;
 	}
-	const std::vector<Pixel *> &PngImage::get_row_pointers() const
+	const Pixel *const *PngImage::get_row_pointers() const
 	{
-		return row_pointers;
+		return &row_pointers[0];
 	}
 	const Pixel &PngImage::get_pixel(uint32_t x, uint32_t y) const
 	{
