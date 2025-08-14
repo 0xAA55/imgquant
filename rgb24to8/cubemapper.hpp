@@ -48,9 +48,18 @@ namespace cubemapper
 				for (size_t y = 0; y < 256; y++)
 				{
 					row.push_back(&mapper[z * 256 * 256 + y * 256]);
+				}
+			}
+#pragma omp parallel for
+			for (ptrdiff_t z = 0; z < 256; z++)
+			{
+				auto &plane = router[z];
+				for (size_t y = 0; y < 256; y++)
+				{
+					auto &row = plane[y];
 					for (size_t x = 0; x < 256; x++)
 					{
-						router[z][y][x] = static_cast<uint8_t>(get_nearest_color_index(palette,
+						row[x] = static_cast<uint8_t>(get_nearest_color_index(palette,
 							static_cast<uint8_t>(x),
 							static_cast<uint8_t>(y),
 							static_cast<uint8_t>(z)));
