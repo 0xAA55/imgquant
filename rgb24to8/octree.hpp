@@ -35,7 +35,6 @@ namespace octree
 		size_t		num_leaves = 0;
 		uint32_t	num_colors = 0;
 
-		size_t reduce_color();
 		OctreeNode *create_node(int level);
 		void get_palette_recursive(OctreeNode *node, on_get_color fn_on_get_color, void *userdata) const;
 
@@ -45,6 +44,7 @@ namespace octree
 
 		size_t add_color(uint8_t r, uint8_t g, uint8_t b);
 		size_t get_num_colors() const;
+		size_t reduce_color();
 		void get_palette(on_get_color fn_on_get_color, void* userdata) const;
 	};
 };
