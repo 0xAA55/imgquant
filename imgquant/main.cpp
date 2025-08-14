@@ -2,6 +2,8 @@
 #include <pngcpp/pngcpp.hpp>
 #include <rgb24to8/rgb24to8.hpp>
 
+#include <iostream>
+
 namespace rgb24to8
 {
     using namespace pngcpp;
@@ -27,8 +29,15 @@ namespace rgb24to8
         std::vector<Rgb> palette_out;
         std::vector<uint8_t *> bitmap_row_pointers;
         rgb24to8(src_png.get_width(), src_png.get_height(), reinterpret_cast<const Rgba *const *>(src_png.get_row_pointers()), bitmap_out, palette_out, &bitmap_row_pointers);
-        PngImage::save_png8_to(std::string(out_png_path), src_png.get_width(), src_png.get_height(),
-            palette_out, &bitmap_row_pointers[0]);
+        try
+        {
+            PngImage::save_png8_to(std::string(out_png_path), src_png.get_width(), src_png.get_height(),
+                palette_out, &bitmap_row_pointers[0]);
+        }
+        catch (const SavePngException &e)
+        {
+            std::cerr << "SavePngException: " << e.what() << std::endl;
+        }
 
         return 0;
     }
