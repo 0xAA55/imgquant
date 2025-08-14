@@ -14,7 +14,7 @@ namespace rgb24to8
 	using namespace cubemapper;
 
 	template<Rgb_c T_pixel, Rgb_c T_palette>
-	void rgb24to8(uint32_t src_width, uint32_t src_height, const T_pixel *const *src_row_pointers,
+	void rgb24to8(uint32_t src_width, uint32_t src_height, T_pixel **src_row_pointers,
 		std::vector<uint8_t> &bitmap_out,
 		std::vector<T_palette> &palette_out,
 		std::vector<uint8_t *> *row_pointers_out)
