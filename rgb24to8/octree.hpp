@@ -44,6 +44,7 @@ namespace octree
 		~PaletteGenerator();
 
 		size_t add_color(uint8_t r, uint8_t g, uint8_t b);
+		size_t get_num_colors() const;
 		void get_palette(on_get_color fn_on_get_color, void* userdata) const;
 	};
 };

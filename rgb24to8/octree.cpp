@@ -122,6 +122,10 @@ namespace octree
 		num_colors++;
 		return num_colors;
 	}
+	size_t PaletteGenerator::get_num_colors() const
+	{
+		return num_leaves;
+	}
 	void PaletteGenerator::get_palette(on_get_color fn_on_get_color, void *userdata) const
 	{
 		get_palette_recursive(root, fn_on_get_color, userdata);
