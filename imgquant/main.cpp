@@ -29,15 +29,20 @@ namespace rgb24to8
         std::vector<Rgb> palette_out;
         std::vector<uint8_t *> bitmap_row_pointers;
         rgb24to8(src_png.get_width(), src_png.get_height(), reinterpret_cast<const Rgba *const *>(src_png.get_row_pointers()), bitmap_out, palette_out, &bitmap_row_pointers);
+
+#ifndef _DEBUG
         try
+#endif // !_DEBUG
         {
             PngImage::save_png8_to(std::string(out_png_path), src_png.get_width(), src_png.get_height(),
                 palette_out, &bitmap_row_pointers[0]);
         }
+#ifndef _DEBUG
         catch (const SavePngException &e)
         {
             std::cerr << "SavePngException: " << e.what() << std::endl;
         }
+#endif // !_DEBUG
 
         return 0;
     }
