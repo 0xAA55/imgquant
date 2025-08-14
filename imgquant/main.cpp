@@ -30,7 +30,7 @@ namespace rgb24to8
 #endif // !_DEBUG
         {
             PngImage::save_png8_to(std::string(out_png_path), src_png.get_width(), src_png.get_height(),
-                palette_out, &bitmap_row_pointers[0]);
+                reinterpret_cast<Rgb *>(&palette_out[0]), palette_out.size(), &bitmap_row_pointers[0]);
         }
 #ifndef _DEBUG
         catch (const SavePngException &e)
