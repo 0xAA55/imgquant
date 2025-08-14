@@ -105,8 +105,8 @@ namespace octree
 			shift = 8 - i;
 			index =
 				((r >> shift) & 1) << 0 |
-				((r >> shift) & 1) << 1 |
-				((r >> shift) & 1) << 2;
+				((g >> shift) & 1) << 1 |
+				((b >> shift) & 1) << 2;
 			if (!(node->child[index]))
 			{
 				node->child[index] = create_node(i);
