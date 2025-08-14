@@ -74,9 +74,9 @@ namespace cubemapper
 		}
 	};
 
-	extern template size_t CubeMapper::get_nearest_color_index(const std::vector<Palette24> &palette, uint8_t R, uint8_t G, uint8_t B);
-	extern template CubeMapper::CubeMapper(const std::vector<Palette24> &palette);
-	extern template size_t CubeMapper::get_nearest_color_index(const std::vector<Palette32> &palette, uint8_t R, uint8_t G, uint8_t B);
-	extern template CubeMapper::CubeMapper(const std::vector<Palette32> &palette);
+	extern template size_t CubeMapper::get_nearest_color_index(const std::vector<Color24> &palette, uint8_t R, uint8_t G, uint8_t B);
+	extern template size_t CubeMapper::get_nearest_color_index(const std::vector<Color32> &palette, uint8_t R, uint8_t G, uint8_t B);
+	extern template CubeMapper::CubeMapper(const std::vector<Color24> &palette);
+	extern template CubeMapper::CubeMapper(const std::vector<Color32> &palette);
 };
 
