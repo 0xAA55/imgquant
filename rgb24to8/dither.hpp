@@ -76,7 +76,7 @@ namespace dither
 		template<Rgb_c Pixel>
 		void ApplyOrdered(uint32_t width, uint32_t height, Pixel **row_pointers) const
 		{
-// #pragma omp parallel for
+#pragma omp parallel for
 			for (ptrdiff_t y = 0; y < static_cast<ptrdiff_t>(height); y++)
 			{
 				auto row = row_pointers[y];
