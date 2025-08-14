@@ -5,12 +5,14 @@
 
 #include "paldef.hpp"
 #include "octree.hpp"
+#include "dither.hpp"
 #include "cubemapper.hpp"
 
 namespace rgb24to8
 {
 	using namespace paldef;
 	using namespace octree;
+	using namespace dither;
 	using namespace cubemapper;
 
 	template<Rgb_c T_pixel, Rgb_c T_palette>
@@ -44,23 +46,22 @@ namespace rgb24to8
 			}, static_cast<void *>(&palette_out)
 		);
 
-		auto mapper = CubeMapper(palette_out);
-
 		size_t pitch = (static_cast<size_t>(src_width - 1) / 4 + 1) * 4;
 		bitmap_out.resize(pitch * src_height);
-		if (row_pointers_out) row_pointers_out->clear();
+		auto dst_row_pointers = std::vector<uint8_t *>();
 
 		for (uint32_t y = 0; y < src_height; y++)
 		{
-			auto src_row = src_row_pointers[y];
 			auto dst_row = &bitmap_out[pitch * y];
-			if (row_pointers_out) row_pointers_out->push_back(dst_row);
-			for (uint32_t x = 0; x < src_width; x++)
-			{
-				auto src_pix = src_row[x];
-				dst_row[x] = mapper.get_color_index(src_pix.R, src_pix.G, src_pix.B);
-			}
+			dst_row_pointers.push_back(dst_row);
 		}
+
+		auto ditherer = Ditherer(palette_out);
+
+		ditherer.ApplyOrdered(src_width, src_height, src_row_pointers);
+		ditherer.ApplyDiffusion(src_width, src_height, src_row_pointers, &dst_row_pointers[0]);
+
+		if (row_pointers_out) *row_pointers_out = dst_row_pointers;
 	}
 
 	extern template
