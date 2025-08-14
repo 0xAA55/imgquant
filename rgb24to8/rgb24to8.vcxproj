@@ -20,12 +20,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cubemapper.hpp" />
+    <ClInclude Include="dither.hpp" />
     <ClInclude Include="octree.hpp" />
     <ClInclude Include="paldef.hpp" />
     <ClInclude Include="rgb24to8.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cubemapper.cpp" />
+    <ClCompile Include="dither.cpp" />
     <ClCompile Include="octree.cpp" />
     <ClCompile Include="rgb24to8.cpp" />
   </ItemGroup>
