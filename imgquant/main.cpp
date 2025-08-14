@@ -95,10 +95,10 @@ namespace rgb24to8
 #pragma omp parallel for
                 for (std::ptrdiff_t y = 0; y < static_cast<std::ptrdiff_t>(src_png.get_height()); y++)
                 {
-                    rgba_map_row_pointers[y] = reinterpret_cast<Rgba *>(reinterpret_cast<uint8_t*>(&rgba_map_out[0]) + pitch * y);
-                    auto *src_row = src_row_pointers[y];
-                    auto *imm_row = indexmap_row_pointers[y];
-                    auto *dst_row = rgba_map_row_pointers[y];
+                    rgba_map_row_pointers[y] = &rgba_map_out[y * src_png.get_width()];
+                    auto src_row = src_row_pointers[y];
+                    auto imm_row = indexmap_row_pointers[y];
+                    auto dst_row = rgba_map_row_pointers[y];
                     for (size_t x = 0; x < src_png.get_width(); x++)
                     {
                         auto &src_pix = src_row[x];
