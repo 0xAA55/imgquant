@@ -94,7 +94,7 @@ namespace pngcpp
 				PNG_COMPRESSION_TYPE_DEFAULT,
 				PNG_FILTER_TYPE_DEFAULT);
 
-			png_set_PLTE(p, i, reinterpret_cast<png_const_colorp>(&palette[0]), palette.size());
+			png_set_PLTE(p, i, reinterpret_cast<png_const_colorp>(&palette[0]), static_cast<int>(palette.size()));
 			png_write_info(p, i);
 			png_write_image(p, const_cast<uint8_t **>(reinterpret_cast<const uint8_t *const*>(row_pointers)));
 			png_write_end(p, i);
