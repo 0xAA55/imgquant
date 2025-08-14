@@ -80,7 +80,7 @@ namespace pngcpp
 			png_write_end(p, i);
 		}
 
-		void write_png_8bit(const std::string &path, uint32_t width, uint32_t height, const std::vector<Rgb> palette, const uint8_t *const*row_pointers) const
+		void write_png_8bit(const std::string &path, uint32_t width, uint32_t height, const Rgb *palette, size_t num_palette_entries, const uint8_t *const*row_pointers) const
 		{
 			auto fp = File(path.c_str(), "wb");
 
@@ -92,7 +92,7 @@ namespace pngcpp
 				PNG_COMPRESSION_TYPE_DEFAULT,
 				PNG_FILTER_TYPE_DEFAULT);
 
-			png_set_PLTE(p, i, reinterpret_cast<png_const_colorp>(&palette[0]), static_cast<int>(palette.size()));
+			png_set_PLTE(p, i, reinterpret_cast<png_const_colorp>(&palette[0]), static_cast<int>(num_palette_entries));
 			png_write_info(p, i);
 			png_write_image(p, const_cast<uint8_t **>(reinterpret_cast<const uint8_t *const*>(row_pointers)));
 			png_write_end(p, i);
@@ -172,10 +172,10 @@ namespace pngcpp
 		auto w = png_writer();
 		w.write_png_rgba(path, width, height, &row_pointers[0]);
 	}
-	void PngImage::save_png8_to(const std::string &path, uint32_t width, uint32_t height, const std::vector<Rgb> palette, const uint8_t *const *row_pointers)
+	void PngImage::save_png8_to(const std::string &path, uint32_t width, uint32_t height, const Rgb *palette, size_t num_palette_entries, const uint8_t *const *row_pointers)
 	{
 		auto w = png_writer();
-		w.write_png_8bit(path, width, height, palette, &row_pointers[0]);
+		w.write_png_8bit(path, width, height, palette, num_palette_entries, &row_pointers[0]);
 	}
 
 }

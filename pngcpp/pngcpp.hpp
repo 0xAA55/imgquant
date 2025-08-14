@@ -74,6 +74,6 @@ namespace pngcpp
 		void set_pixel(uint32_t x, uint32_t y, const Pixel& pixel);
 
 		void save_png32_to(const std::string &path) const;
-		static void save_png8_to(const std::string &path, uint32_t width, uint32_t height, const std::vector<Rgb> palette, const uint8_t *const *row_pointers);
+		static void save_png8_to(const std::string &path, uint32_t width, uint32_t height, const Rgb* palette, size_t num_palette_entries, const uint8_t *const *row_pointers);
 	};
 };
