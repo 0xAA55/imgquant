@@ -68,20 +68,57 @@ namespace rgb24to8
             usage(argv[0]);
             return 1;
         }
-        auto src_png = PngImage(src_png_path);
-        std::vector<uint8_t> bitmap_out;
-        std::vector<Color24> palette_out;
-        std::vector<uint8_t *> bitmap_row_pointers;
-        rgb24to8(src_png.get_width(), src_png.get_height(), reinterpret_cast<Color32 **>(src_png.get_row_pointers()), bitmap_out, palette_out, &bitmap_row_pointers);
 
 #ifndef _DEBUG
         try
 #endif // !_DEBUG
         {
-            PngImage::save_png8_to(std::string(out_png_path), src_png.get_width(), src_png.get_height(),
-                reinterpret_cast<Rgb *>(&palette_out[0]), palette_out.size(), &bitmap_row_pointers[0]);
+            auto src_png = PngImage(src_png_path);
+            auto src_row_pointers = reinterpret_cast<Color32 **>(src_png.get_row_pointers());
+            std::vector<uint8_t> indexmap_out;
+            std::vector<Color24> palette_out;
+            std::vector<uint8_t *> indexmap_row_pointers;
+            rgb24to8(src_png.get_width(), src_png.get_height(), src_row_pointers, indexmap_out, palette_out, &indexmap_row_pointers);
+
+            if (!preserve_alpha)
+            {
+                PngImage::save_png8_to(std::string(out_png_path), src_png.get_width(), src_png.get_height(),
+                    reinterpret_cast<Rgb *>(&palette_out[0]), palette_out.size(), &indexmap_row_pointers[0]);
+            }
+            else
+            {
+                std::vector<Rgba> rgba_map_out;
+                std::vector<Rgba *> rgba_map_row_pointers;
+                size_t pitch = ((static_cast<size_t>(src_png.get_width()) * sizeof(Rgba) - 1) / 4 + 1) * 4;
+                rgba_map_out.resize(pitch * src_png.get_height() / 2);
+                rgba_map_row_pointers.resize(src_png.get_height());
+#pragma omp parallel for
+                for (std::ptrdiff_t y = 0; y < static_cast<std::ptrdiff_t>(src_png.get_height()); y++)
+                {
+                    rgba_map_row_pointers[y] = reinterpret_cast<Rgba *>(reinterpret_cast<uint8_t*>(&rgba_map_out[0]) + pitch * y);
+                    auto *src_row = src_row_pointers[y];
+                    auto *imm_row = indexmap_row_pointers[y];
+                    auto *dst_row = rgba_map_row_pointers[y];
+                    for (size_t x = 0; x < src_png.get_width(); x++)
+                    {
+                        auto &src_pix = src_row[x];
+                        auto &imm_pix = imm_row[x];
+                        auto &dst_pix = dst_row[x];
+                        auto &color = palette_out[imm_pix];
+                        dst_pix.A = src_pix.A;
+                        dst_pix.R = color.R;
+                        dst_pix.G = color.G;
+                        dst_pix.B = color.B;
+                    }
+                }
+                PngImage::save_png32_to(std::string(out_png_path), src_png.get_width(), src_png.get_height(), reinterpret_cast<Pixel **>((&rgba_map_row_pointers[0])));
+            }
         }
 #ifndef _DEBUG
+        catch (const LoadPngException &e)
+        {
+            std::cerr << "LoadPngException: " << e.what() << std::endl;
+        }
         catch (const SavePngException &e)
         {
             std::cerr << "SavePngException: " << e.what() << std::endl;
