@@ -70,7 +70,7 @@ namespace cubemapper
 
 		uint8_t get_color_index(uint8_t R, uint8_t G, uint8_t B) const
 		{
-			return router[B][G][R];
+			return router[R][G][B];
 		}
 	};
 
