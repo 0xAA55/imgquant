@@ -66,7 +66,6 @@ namespace pngcpp
 			auto fp = File(path.c_str(), "wb");
 
 			png_init_io(p, fp.get());
-			png_write_png(p, i, 0, nullptr);
 
 			png_set_IHDR(p, i, width, height, 32,
 				PNG_COLOR_TYPE_RGBA,
@@ -86,7 +85,6 @@ namespace pngcpp
 			auto fp = File(path.c_str(), "wb");
 
 			png_init_io(p, fp.get());
-			png_write_png(p, i, 0, nullptr);
 
 			png_set_IHDR(p, i, width, height, 8,
 				PNG_COLOR_TYPE_PALETTE,
