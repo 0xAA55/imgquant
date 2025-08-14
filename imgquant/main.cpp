@@ -7,11 +7,6 @@
 namespace rgb24to8
 {
     using namespace pngcpp;
-    template
-        void rgb24to8(uint32_t src_width, uint32_t src_height, const Rgba *const *src_row_pointers,
-            std::vector<uint8_t> &bitmap_out,
-            std::vector<Rgb> &palette_out,
-            std::vector<uint8_t *> *row_pointers_out);
 
     extern"C" int main(int argc, char **argv)
     {
