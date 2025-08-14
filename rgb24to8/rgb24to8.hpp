@@ -45,6 +45,8 @@ namespace rgb24to8
 				palette.push_back(new_entry);
 			}, static_cast<void *>(&palette_out)
 		);
+		if (palette_out.size() < 256) palette_out.push_back(T_palette{ 0, 0, 0 });
+		if (palette_out.size() < 256) palette_out.push_back(T_palette{ 255, 255, 255 });
 
 		size_t pitch = (static_cast<size_t>(src_width - 1) / 4 + 1) * 4;
 		bitmap_out.resize(pitch * src_height);
