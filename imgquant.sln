@@ -1,0 +1,70 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36327.8 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imgquant", "imgquant\imgquant.vcxproj", "{E7FA30B5-090E-42CB-9E02-339D2B3BE25A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{86CED122-9B46-437C-9592-B424C09D40AA} = {86CED122-9B46-437C-9592-B424C09D40AA}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libpng", "libpng\libpng.vcxproj", "{641A8336-4C8E-4A97-8D45-5FBDE8314AB7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F5893B18-73D3-437C-97BE-6B12582F72B6} = {F5893B18-73D3-437C-97BE-6B12582F72B6}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zlib", "zlib\zlib.vcxproj", "{F5893B18-73D3-437C-97BE-6B12582F72B6}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pngcpp", "pngcpp\pngcpp.vcxproj", "{86CED122-9B46-437C-9592-B424C09D40AA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{641A8336-4C8E-4A97-8D45-5FBDE8314AB7} = {641A8336-4C8E-4A97-8D45-5FBDE8314AB7}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E7FA30B5-090E-42CB-9E02-339D2B3BE25A}.Debug|x64.ActiveCfg = Debug|x64
+		{E7FA30B5-090E-42CB-9E02-339D2B3BE25A}.Debug|x64.Build.0 = Debug|x64
+		{E7FA30B5-090E-42CB-9E02-339D2B3BE25A}.Debug|x86.ActiveCfg = Debug|Win32
+		{E7FA30B5-090E-42CB-9E02-339D2B3BE25A}.Debug|x86.Build.0 = Debug|Win32
+		{E7FA30B5-090E-42CB-9E02-339D2B3BE25A}.Release|x64.ActiveCfg = Release|x64
+		{E7FA30B5-090E-42CB-9E02-339D2B3BE25A}.Release|x64.Build.0 = Release|x64
+		{E7FA30B5-090E-42CB-9E02-339D2B3BE25A}.Release|x86.ActiveCfg = Release|Win32
+		{E7FA30B5-090E-42CB-9E02-339D2B3BE25A}.Release|x86.Build.0 = Release|Win32
+		{641A8336-4C8E-4A97-8D45-5FBDE8314AB7}.Debug|x64.ActiveCfg = Debug|x64
+		{641A8336-4C8E-4A97-8D45-5FBDE8314AB7}.Debug|x64.Build.0 = Debug|x64
+		{641A8336-4C8E-4A97-8D45-5FBDE8314AB7}.Debug|x86.ActiveCfg = Debug|Win32
+		{641A8336-4C8E-4A97-8D45-5FBDE8314AB7}.Debug|x86.Build.0 = Debug|Win32
+		{641A8336-4C8E-4A97-8D45-5FBDE8314AB7}.Release|x64.ActiveCfg = Release|x64
+		{641A8336-4C8E-4A97-8D45-5FBDE8314AB7}.Release|x64.Build.0 = Release|x64
+		{641A8336-4C8E-4A97-8D45-5FBDE8314AB7}.Release|x86.ActiveCfg = Release|Win32
+		{641A8336-4C8E-4A97-8D45-5FBDE8314AB7}.Release|x86.Build.0 = Release|Win32
+		{F5893B18-73D3-437C-97BE-6B12582F72B6}.Debug|x64.ActiveCfg = Debug|x64
+		{F5893B18-73D3-437C-97BE-6B12582F72B6}.Debug|x64.Build.0 = Debug|x64
+		{F5893B18-73D3-437C-97BE-6B12582F72B6}.Debug|x86.ActiveCfg = Debug|Win32
+		{F5893B18-73D3-437C-97BE-6B12582F72B6}.Debug|x86.Build.0 = Debug|Win32
+		{F5893B18-73D3-437C-97BE-6B12582F72B6}.Release|x64.ActiveCfg = Release|x64
+		{F5893B18-73D3-437C-97BE-6B12582F72B6}.Release|x64.Build.0 = Release|x64
+		{F5893B18-73D3-437C-97BE-6B12582F72B6}.Release|x86.ActiveCfg = Release|Win32
+		{F5893B18-73D3-437C-97BE-6B12582F72B6}.Release|x86.Build.0 = Release|Win32
+		{86CED122-9B46-437C-9592-B424C09D40AA}.Debug|x64.ActiveCfg = Debug|x64
+		{86CED122-9B46-437C-9592-B424C09D40AA}.Debug|x64.Build.0 = Debug|x64
+		{86CED122-9B46-437C-9592-B424C09D40AA}.Debug|x86.ActiveCfg = Debug|Win32
+		{86CED122-9B46-437C-9592-B424C09D40AA}.Debug|x86.Build.0 = Debug|Win32
+		{86CED122-9B46-437C-9592-B424C09D40AA}.Release|x64.ActiveCfg = Release|x64
+		{86CED122-9B46-437C-9592-B424C09D40AA}.Release|x64.Build.0 = Release|x64
+		{86CED122-9B46-437C-9592-B424C09D40AA}.Release|x86.ActiveCfg = Release|Win32
+		{86CED122-9B46-437C-9592-B424C09D40AA}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0C6D731C-1318-496C-B7B3-998764725967}
+	EndGlobalSection
+EndGlobal
