@@ -33,17 +33,17 @@ namespace pngcpp
 	};
 #pragma pack(pop)
 
-	class InvalidArgument : public std::exception {
+	class InvalidArgument : public std::runtime_error {
 	public:
 		InvalidArgument(const std::string &what) noexcept;
 	};
 
-	class LoadPngException : public std::exception {
+	class LoadPngException : public std::runtime_error {
 	public:
 		LoadPngException(const std::string &what) noexcept;
 	};
 
-	class SavePngException : public std::exception {
+	class SavePngException : public std::runtime_error {
 	public:
 		SavePngException(const std::string &what) noexcept;
 	};

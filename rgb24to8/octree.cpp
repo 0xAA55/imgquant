@@ -3,7 +3,7 @@
 namespace octree
 {
 	NoReducibleNodes::NoReducibleNodes(const char *what) noexcept :
-		std::exception(what)
+		std::runtime_error(what)
 	{
 	}
 	OctreeNode::~OctreeNode()

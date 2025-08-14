@@ -5,7 +5,7 @@
 
 namespace octree
 {
-	class NoReducibleNodes : public std::exception
+	class NoReducibleNodes : public std::runtime_error
 	{
 	public:
 		NoReducibleNodes(const char *what) noexcept;

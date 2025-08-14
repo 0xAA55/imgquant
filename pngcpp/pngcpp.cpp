@@ -6,15 +6,15 @@
 namespace pngcpp
 {
 	InvalidArgument::InvalidArgument(const std::string &what) noexcept:
-		std::exception(what.c_str())
+		std::runtime_error(what.c_str())
 	{
 	}
 	LoadPngException::LoadPngException(const std::string &what) noexcept :
-		std::exception(what.c_str())
+		std::runtime_error(what.c_str())
 	{
 	}
 	SavePngException::SavePngException(const std::string &what) noexcept :
-		std::exception(what.c_str())
+		std::runtime_error(what.c_str())
 	{
 	}
 	class File
