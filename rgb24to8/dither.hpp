@@ -42,7 +42,7 @@ namespace dither
 				for (uint32_t x = 0; x < 256; x++)
 				{
 					dither_matrix[static_cast<size_t>(x) + static_cast<size_t>(y) * 256] =
-						bit_reverse(bit_interleave(x ^ y, x));
+						static_cast<int>(bit_reverse(bit_interleave(x ^ y, x))) >> 24;
 				}
 			}
 
