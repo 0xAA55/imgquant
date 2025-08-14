@@ -124,10 +124,25 @@ namespace dither
 		{
 			for (size_t y = 0; y < static_cast<size_t>(height); y++)
 			{
-				auto row = row_pointers[y];
+				auto src_row = row_pointers[y];
+				auto dst_row = out_row_pointers[y];
+				bool is_last_line = (y == static_cast<size_t>(height) - 1);
+				auto src_row_2 = is_last_line ? row_pointers[y] : row_pointers[y + 1];
 				for (size_t x = 0; x < static_cast<size_t>(width); x++)
 				{
-
+					bool is_first_pix = (x == 0);
+					bool is_last_pix = (x == static_cast<size_t>(width) - 1);
+					auto &src_pix = src_row[x];
+					auto dst_pix = palette_mapper.get_color_index(src_pix.R, src_pix.G, src_pix.B);
+					dst_row[x] = dst_pix;
+					auto quant_error = get_quant_error(src_pix, dst_pix);
+					if (!is_last_line)
+					{
+						if (!is_first_pix) diffuse_error(src_row_2[x - 1], quant_error, 3, 16);
+						diffuse_error(src_row_2[x], quant_error, 5, 16);
+						if (!is_last_pix) diffuse_error(src_row_2[x + 1], quant_error, 1, 16);
+					}
+					if (!is_last_pix) diffuse_error(src_row[x + 1], quant_error, 7, 16);
 				}
 			}
 		}
