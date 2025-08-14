@@ -1,0 +1,9 @@
+.vs/
+intermediate/
+out/
+lib/x86_Debug/
+lib/x64_Debug/
+lib/x86_Release/
+lib/x64_Release/
+*.filters
+*.user
