@@ -25,6 +25,7 @@ namespace dither
 
 		std::vector<int> dither_matrix;
 		CubeMapper palette_mapper;
+		std::vector<Color24> palette;
 
 		uint32_t r_diff = 0;
 		uint32_t g_diff = 0;
@@ -64,6 +65,11 @@ namespace dither
 			{
 				uint32_t diff = sort_palette[i + 1].B - sort_palette[i].B;
 				if (diff > b_diff) b_diff = diff;
+			}
+
+			for (size_t i = 0; i < palette.size(); i++)
+			{
+				this->palette.push_back(Color24{ palette[i].R, palette[i].G, palette[i].B });
 			}
 		}
 
