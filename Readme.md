@@ -16,6 +16,8 @@ Compile first.
   * Run `make -j` to get the executable `quant`
   * Run `./quant _your_PNG_file_.png _output_file_.png`
 
+Optional parameter: `--preserve-alpha`, if used, will preserve the alpha channel.
+
 ## Compression Algorithm
 
 1. Use the octree data structure algorithm to extract a 256-color palette from the original image.
@@ -28,4 +30,5 @@ Compile first.
 
 * RGB images are compressed to within one-third of their original size.
 * RGBA images have their transparency channel discarded, resulting in a compression of less than one-quarter their original size.
+  * Use `--preserve-alpha` to preserve the alpha channel, but the compression effect (file size reduction) will be significantly reduced.
 * Generally, compression is most pronounced for bitmaps with fewer colors.
