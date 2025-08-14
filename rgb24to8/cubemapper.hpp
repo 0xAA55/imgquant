@@ -15,26 +15,6 @@ namespace cubemapper
 		std::vector<uint8_t> mapper;
 		std::vector<std::vector<uint8_t *>> router;
 
-		template<Rgb_c T>
-		static size_t get_nearest_color_index(const std::vector<T> &palette, uint8_t R, uint8_t G, uint8_t B)
-		{
-			size_t best_i = 0;
-			uint32_t best_score = 0xFFFFFFFF;
-			for (size_t i = 0; i < palette.size(); i++)
-			{
-				int r_diff = static_cast<int>(R) - static_cast<int>(palette[i].R);
-				int g_diff = static_cast<int>(G) - static_cast<int>(palette[i].G);
-				int b_diff = static_cast<int>(B) - static_cast<int>(palette[i].B);
-				uint32_t diff_score = static_cast<uint32_t>(r_diff * r_diff + g_diff * g_diff + b_diff * b_diff);
-				if (diff_score < best_score)
-				{
-					best_score = diff_score;
-					best_i = i;
-				}
-			}
-			return best_i;
-		}
-
 	public:
 		CubeMapper() = delete;
 		template<Rgb_c T>
@@ -66,6 +46,27 @@ namespace cubemapper
 					}
 				}
 			}
+		}
+
+
+		template<Rgb_c T>
+		static size_t get_nearest_color_index(const std::vector<T> &palette, uint8_t R, uint8_t G, uint8_t B)
+		{
+			size_t best_i = 0;
+			uint32_t best_score = 0xFFFFFFFF;
+			for (size_t i = 0; i < palette.size(); i++)
+			{
+				int r_diff = static_cast<int>(R) - static_cast<int>(palette[i].R);
+				int g_diff = static_cast<int>(G) - static_cast<int>(palette[i].G);
+				int b_diff = static_cast<int>(B) - static_cast<int>(palette[i].B);
+				uint32_t diff_score = static_cast<uint32_t>(r_diff * r_diff + g_diff * g_diff + b_diff * b_diff);
+				if (diff_score < best_score)
+				{
+					best_score = diff_score;
+					best_i = i;
+				}
+			}
+			return best_i;
 		}
 
 		uint8_t get_color_index(uint8_t R, uint8_t G, uint8_t B) const
