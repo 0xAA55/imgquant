@@ -2,6 +2,7 @@
 
 #include <cinttypes>
 #include <vector>
+#include <cstddef>
 
 #include "paldef.hpp"
 
@@ -12,14 +13,19 @@ namespace cubemapper
 	class CubeMapper
 	{
 	protected:
+#if USE_MAPPER
 		std::vector<uint8_t> mapper;
 		std::vector<std::vector<uint8_t *>> router;
+#else
+		std::vector<Color24> palette;
+#endif
 
 	public:
 		CubeMapper() = delete;
 		template<Rgb_c T>
 		CubeMapper(const std::vector<T> &palette)
 		{
+#if USE_MAPPER
 			mapper.resize(static_cast<size_t>(256) * 256 * 256);
 			for (size_t z = 0; z < 256; z++)
 			{
@@ -31,7 +37,7 @@ namespace cubemapper
 				}
 			}
 #pragma omp parallel for
-			for (ptrdiff_t z = 0; z < 256; z++)
+			for (std::ptrdiff_t z = 0; z < 256; z++)
 			{
 				auto &plane = router[z];
 				for (size_t y = 0; y < 256; y++)
@@ -46,6 +52,12 @@ namespace cubemapper
 					}
 				}
 			}
+#else
+			for (auto &c : palette)
+			{
+				this->palette.push_back(Color24{c.R, c.G, c.B});
+			}
+#endif
 		}
 
 
@@ -71,7 +83,11 @@ namespace cubemapper
 
 		uint8_t get_color_index(uint8_t R, uint8_t G, uint8_t B) const
 		{
+#if USE_MAPPER
 			return router[B][G][R];
+#else
+			return get_nearest_color_index(palette, R, G, B);
+#endif
 		}
 	};
 
