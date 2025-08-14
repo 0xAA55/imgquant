@@ -13,14 +13,14 @@ namespace paldef
 	};
 
 #pragma pack(push, 1)
-	struct Palette24
+	struct Color24
 	{
 		uint8_t R;
 		uint8_t G;
 		uint8_t B;
 	};
 
-	struct Palette32 : public Palette24 {
+	struct Color32 : public Color24 {
 		uint8_t A;
 	};
 #pragma pack(pop)
