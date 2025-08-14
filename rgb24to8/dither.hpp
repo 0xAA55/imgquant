@@ -10,6 +10,13 @@ namespace dither
 {
 	using namespace cubemapper;
 
+	struct QuantError
+	{
+		int R;
+		int G;
+		int B;
+	};
+
 	class Ditherer
 	{
 	protected:
