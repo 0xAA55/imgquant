@@ -78,10 +78,10 @@ namespace dither
 		{
 			int diff = (r_diff + g_diff + b_diff) / 3;
 #pragma omp parallel for
-			for (ptrdiff_t y = 0; y < static_cast<ptrdiff_t>(height); y++)
+			for (std::ptrdiff_t y = 0; y < static_cast<std::ptrdiff_t>(height); y++)
 			{
 				auto *row = row_pointers[y];
-				for (ptrdiff_t x = 0; x < static_cast<ptrdiff_t>(width); x++)
+				for (std::ptrdiff_t x = 0; x < static_cast<std::ptrdiff_t>(width); x++)
 				{
 					auto &pix = row[x];
 					int dm = dither_matrix[(x & 0xFF) + (y & 0xFF) * 256];
