@@ -11,7 +11,7 @@ namespace rgb24to8
             std::vector<Rgb> &palette_out,
             std::vector<uint8_t *> *row_pointers_out);
 
-    int main(int argc, char** argv)
+    extern"C" int main(int argc, char **argv)
     {
         if (argc < 3)
         {
