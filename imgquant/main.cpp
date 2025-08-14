@@ -12,7 +12,7 @@ namespace rgb24to8
     {
         if (argc < 3)
         {
-            printf("Usage: %s <input.png> <output.png>", argv[0]);
+            std::cout << "Usage:" << argv[0] << " <input.png> <output.png>" << std::endl;
             return 1;
         }
 
