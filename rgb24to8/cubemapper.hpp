@@ -86,7 +86,7 @@ namespace cubemapper
 #if USE_MAPPER
 			return router[B][G][R];
 #else
-			return get_nearest_color_index(palette, R, G, B);
+			return static_cast<uint8_t>(get_nearest_color_index(palette, R, G, B));
 #endif
 		}
 	};
