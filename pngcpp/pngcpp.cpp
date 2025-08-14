@@ -67,7 +67,7 @@ namespace pngcpp
 
 			png_init_io(p, fp.get());
 
-			png_set_IHDR(p, i, width, height, 32,
+			png_set_IHDR(p, i, width, height, 8,
 				PNG_COLOR_TYPE_RGBA,
 				PNG_INTERLACE_NONE,
 				PNG_COMPRESSION_TYPE_DEFAULT,
