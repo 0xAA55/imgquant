@@ -183,11 +183,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="imgquant.cpp" />
-    <ClCompile Include="octree.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="octree.hpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
