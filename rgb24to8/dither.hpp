@@ -94,6 +94,18 @@ namespace dither
 		}
 
 		template<Rgb_c Pixel>
+		QuantError get_quant_error(Pixel& src_pix, uint8_t dst_pix)
+		{
+			auto dst_col = palette[dst_pix];
+			return QuantError
+			{
+				static_cast<int>(src_pix.R) - static_cast<int>(dst_col.R),
+				static_cast<int>(src_pix.G) - static_cast<int>(dst_col.G),
+				static_cast<int>(src_pix.B) - static_cast<int>(dst_col.B),
+			};
+		}
+
+		template<Rgb_c Pixel>
 		void ApplyDiffusion(uint32_t width, uint32_t height, Pixel **row_pointers, uint8_t **out_row_pointers)
 		{
 			for (size_t y = 0; y < static_cast<size_t>(height); y++)
