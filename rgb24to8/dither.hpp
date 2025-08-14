@@ -83,7 +83,12 @@ namespace dither
 				auto *row = row_pointers[y];
 				for (ptrdiff_t x = 0; x < static_cast<ptrdiff_t>(width); x++)
 				{
-
+					auto &pix = row[x];
+					int dm = dither_matrix[(x & 0xFF) + (y & 0xFF) * 256];
+					dm = dm * diff / 128;
+					pix.R = static_cast<uint8_t>(std::max(std::min(static_cast<int>(pix.R) + dm, 255), 0));
+					pix.G = static_cast<uint8_t>(std::max(std::min(static_cast<int>(pix.G) + dm, 255), 0));
+					pix.B = static_cast<uint8_t>(std::max(std::min(static_cast<int>(pix.B) + dm, 255), 0));
 				}
 			}
 		}
