@@ -1,10 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36327.8 d17.14
+VisualStudioVersion = 17.14.36327.8
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imgquant", "imgquant\imgquant.vcxproj", "{E7FA30B5-090E-42CB-9E02-339D2B3BE25A}"
 	ProjectSection(ProjectDependencies) = postProject
+		{0A93EE5E-F663-4FBC-B396-DDB7C100097B} = {0A93EE5E-F663-4FBC-B396-DDB7C100097B}
 		{86CED122-9B46-437C-9592-B424C09D40AA} = {86CED122-9B46-437C-9592-B424C09D40AA}
 	EndProjectSection
 EndProject
@@ -19,6 +20,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pngcpp", "pngcpp\pngcpp.vcx
 	ProjectSection(ProjectDependencies) = postProject
 		{641A8336-4C8E-4A97-8D45-5FBDE8314AB7} = {641A8336-4C8E-4A97-8D45-5FBDE8314AB7}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rgb24to8", "rgb24to8\rgb24to8.vcxproj", "{0A93EE5E-F663-4FBC-B396-DDB7C100097B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,6 +63,14 @@ Global
 		{86CED122-9B46-437C-9592-B424C09D40AA}.Release|x64.Build.0 = Release|x64
 		{86CED122-9B46-437C-9592-B424C09D40AA}.Release|x86.ActiveCfg = Release|Win32
 		{86CED122-9B46-437C-9592-B424C09D40AA}.Release|x86.Build.0 = Release|Win32
+		{0A93EE5E-F663-4FBC-B396-DDB7C100097B}.Debug|x64.ActiveCfg = Debug|x64
+		{0A93EE5E-F663-4FBC-B396-DDB7C100097B}.Debug|x64.Build.0 = Debug|x64
+		{0A93EE5E-F663-4FBC-B396-DDB7C100097B}.Debug|x86.ActiveCfg = Debug|Win32
+		{0A93EE5E-F663-4FBC-B396-DDB7C100097B}.Debug|x86.Build.0 = Debug|Win32
+		{0A93EE5E-F663-4FBC-B396-DDB7C100097B}.Release|x64.ActiveCfg = Release|x64
+		{0A93EE5E-F663-4FBC-B396-DDB7C100097B}.Release|x64.Build.0 = Release|x64
+		{0A93EE5E-F663-4FBC-B396-DDB7C100097B}.Release|x86.ActiveCfg = Release|Win32
+		{0A93EE5E-F663-4FBC-B396-DDB7C100097B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
