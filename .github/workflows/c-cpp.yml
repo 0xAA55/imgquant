@@ -18,4 +18,6 @@ jobs:
         sudo apt update |
         sudo apt install libpng-dev
     - name: make
-      run: make
+      run:
+        make -j |
+        ./quant test2.png testout.png
