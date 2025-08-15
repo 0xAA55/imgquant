@@ -5,7 +5,7 @@ namespace rgb32to8
 	Bitmap<uint8_t> rgb32to8(const Bitmap<ColorRgba>& src, std::vector<ColorRgba> &palette_out)
 	{
 		uint32_t src_width = src.get_width();
-		uint32_t src_height = src.get_width();
+		uint32_t src_height = src.get_height();
 		auto palette_gen = PaletteGenerator();
 		for (uint32_t y = 0; y < src_height; y++)
 		{
