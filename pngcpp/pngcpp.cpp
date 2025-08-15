@@ -216,4 +216,9 @@ namespace pngcpp
 		auto w = png_writer();
 		w.write_png_8bit(path, width, height, palette, num_palette_entries, &row_pointers[0]);
 	}
+	void PngImage::save_png8_to(const std::string &path, uint32_t width, uint32_t height, const Rgba *palette, size_t num_palette_entries, const uint8_t *const *row_pointers)
+	{
+		auto w = png_writer();
+		w.write_png_8bit(path, width, height, palette, num_palette_entries, &row_pointers[0]);
+	}
 }
