@@ -6,7 +6,7 @@ OBJS=main.o
 imgquant: $(OBJS) ../bitmap/libbitmap.a ../pngcpp/libpngcpp.a ../rgbto8/librgbto8.a
 	$(CC) $(OBJS) -o $@ $(LDLIBS) $(LDFLAGS)
 
-../pngcpp/libbitmap.a:
+../bitmap/libbitmap.a:
 	make -C ../bitmap
 
 ../pngcpp/libpngcpp.a:
