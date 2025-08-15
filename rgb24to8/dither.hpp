@@ -95,19 +95,10 @@ namespace dither
 
 		void ApplyOrdered(uint32_t width, uint32_t height, uint8_t **row_pointers) const;
 		QuantError get_quant_error(QuantError& src_pix, uint8_t dst_pix) const;
+		static void diffuse_error(QuantError &target, QuantError& error, int numerator, int denominator);
 
 		template<Rgb_c Pixel>
-		static void diffuse_error(Pixel &target, QuantError& error, int numerator, int denominator)
 		{
-			int R_diffuse = error.R * numerator / denominator;
-			int G_diffuse = error.G * numerator / denominator;
-			int B_diffuse = error.B * numerator / denominator;
-			target.R = static_cast<uint8_t>(std::max(std::min(static_cast<int>(target.R) + R_diffuse, 255), 0));
-			target.G = static_cast<uint8_t>(std::max(std::min(static_cast<int>(target.G) + G_diffuse, 255), 0));
-			target.B = static_cast<uint8_t>(std::max(std::min(static_cast<int>(target.B) + B_diffuse, 255), 0));
-		}
-
-		template<Rgb_c Pixel>
 		void ApplyDiffusion(uint32_t width, uint32_t height, Pixel **row_pointers, uint8_t **out_row_pointers)
 		{
 			for (size_t y = 0; y < static_cast<size_t>(height); y++)

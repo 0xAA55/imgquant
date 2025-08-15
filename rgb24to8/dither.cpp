@@ -54,4 +54,13 @@ namespace dither
 			src_pix.B - static_cast<int>(dst_col.B),
 		};
 	}
+	void Ditherer::diffuse_error(QuantError & target, QuantError & error, int numerator, int denominator)
+	{
+		int R_diffuse = error.R * numerator / denominator;
+		int G_diffuse = error.G * numerator / denominator;
+		int B_diffuse = error.B * numerator / denominator;
+		target.R += R_diffuse;
+		target.G += G_diffuse;
+		target.B += B_diffuse;
+	}
 };
