@@ -19,9 +19,15 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pngcpp", "pngcpp\pngcpp.vcxproj", "{86CED122-9B46-437C-9592-B424C09D40AA}"
 	ProjectSection(ProjectDependencies) = postProject
 		{641A8336-4C8E-4A97-8D45-5FBDE8314AB7} = {641A8336-4C8E-4A97-8D45-5FBDE8314AB7}
+		{B3BD9A52-F6CB-43D0-A89B-4A7713FC4940} = {B3BD9A52-F6CB-43D0-A89B-4A7713FC4940}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rgbto8", "rgbto8\rgbto8.vcxproj", "{0A93EE5E-F663-4FBC-B396-DDB7C100097B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B3BD9A52-F6CB-43D0-A89B-4A7713FC4940} = {B3BD9A52-F6CB-43D0-A89B-4A7713FC4940}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bitmap", "bitmap\bitmap.vcxproj", "{B3BD9A52-F6CB-43D0-A89B-4A7713FC4940}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +77,14 @@ Global
 		{0A93EE5E-F663-4FBC-B396-DDB7C100097B}.Release|x64.Build.0 = Release|x64
 		{0A93EE5E-F663-4FBC-B396-DDB7C100097B}.Release|x86.ActiveCfg = Release|Win32
 		{0A93EE5E-F663-4FBC-B396-DDB7C100097B}.Release|x86.Build.0 = Release|Win32
+		{B3BD9A52-F6CB-43D0-A89B-4A7713FC4940}.Debug|x64.ActiveCfg = Debug|x64
+		{B3BD9A52-F6CB-43D0-A89B-4A7713FC4940}.Debug|x64.Build.0 = Debug|x64
+		{B3BD9A52-F6CB-43D0-A89B-4A7713FC4940}.Debug|x86.ActiveCfg = Debug|Win32
+		{B3BD9A52-F6CB-43D0-A89B-4A7713FC4940}.Debug|x86.Build.0 = Debug|Win32
+		{B3BD9A52-F6CB-43D0-A89B-4A7713FC4940}.Release|x64.ActiveCfg = Release|x64
+		{B3BD9A52-F6CB-43D0-A89B-4A7713FC4940}.Release|x64.Build.0 = Release|x64
+		{B3BD9A52-F6CB-43D0-A89B-4A7713FC4940}.Release|x86.ActiveCfg = Release|Win32
+		{B3BD9A52-F6CB-43D0-A89B-4A7713FC4940}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
