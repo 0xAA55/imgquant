@@ -3,8 +3,11 @@ LDFLAGS=-L../pngcpp -L../rgbto8
 LDLIBS=-lstdc++ -lpng -lpngcpp -lrgbto8
 OBJS=main.o
 
-imgquant: $(OBJS) ../pngcpp/libpngcpp.a ../rgbto8/librgbto8.a
+imgquant: $(OBJS) ../bitmap/libbitmap.a ../pngcpp/libpngcpp.a ../rgbto8/librgbto8.a
 	$(CC) $(OBJS) -o $@ $(LDLIBS) $(LDFLAGS)
+
+../pngcpp/libbitmap.a:
+	make -C ../bitmap
 
 ../pngcpp/libpngcpp.a:
 	make -C ../pngcpp
