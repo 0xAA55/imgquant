@@ -98,6 +98,37 @@ namespace pngcpp
 			png_write_end(p, i);
 		}
 
+		void write_png_8bit(const std::string &path, uint32_t width, uint32_t height, const Rgba *palette, size_t num_palette_entries, const uint8_t *const *row_pointers) const
+		{
+			auto fp = File(path.c_str(), "wb");
+
+			png_init_io(p, fp.get());
+
+			png_set_IHDR(p, i, width, height, 8,
+				PNG_COLOR_TYPE_PALETTE,
+				PNG_INTERLACE_NONE,
+				PNG_COMPRESSION_TYPE_DEFAULT,
+				PNG_FILTER_TYPE_DEFAULT);
+
+			auto RgbPalette = std::vector<Rgb>();
+			auto AlphaPeltte = std::vector<uint8_t>();
+			for (size_t i = 0; i < num_palette_entries; i++)
+			{
+				auto &entry = palette[i];
+				RgbPalette.push_back(Rgb{
+					entry.R,
+					entry.G,
+					entry.B,
+				});
+				AlphaPeltte.push_back(entry.A);
+			}
+			png_set_PLTE(p, i, reinterpret_cast<png_const_colorp>(&RgbPalette[0]), static_cast<int>(num_palette_entries));
+			png_set_tRNS(p, i, &AlphaPeltte[0], static_cast<int>(num_palette_entries), nullptr);
+			png_write_info(p, i);
+			png_write_image(p, const_cast<uint8_t **>(reinterpret_cast<const uint8_t *const *>(row_pointers)));
+			png_write_end(p, i);
+		}
+
 	private:
 		static void on_png_error(void *self, const char *message)
 		{
