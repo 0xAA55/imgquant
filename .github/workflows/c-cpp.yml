@@ -21,4 +21,4 @@ jobs:
     - name: make
       run: |
         make -j
-        ./quant test2.png testout.png
+        make tests -j
