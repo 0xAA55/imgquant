@@ -6,11 +6,11 @@
 
 #include "paldef.hpp"
 
-namespace cubemapper
+namespace rgb2i
 {
 	using namespace paldef;
 
-	class CubeMapper
+	class Rgb2I
 	{
 	protected:
 #if USE_MAPPER
@@ -21,9 +21,9 @@ namespace cubemapper
 #endif
 
 	public:
-		CubeMapper() = delete;
+		Rgb2I() = delete;
 		template<Rgb_c T>
-		CubeMapper(const std::vector<T> &palette)
+		Rgb2I(const std::vector<T> &palette)
 		{
 #if USE_MAPPER
 			mapper.resize(static_cast<size_t>(256) * 256 * 256);
@@ -91,9 +91,9 @@ namespace cubemapper
 		}
 	};
 
-	extern template size_t CubeMapper::get_nearest_color_index(const std::vector<Color24> &palette, uint8_t R, uint8_t G, uint8_t B);
-	extern template size_t CubeMapper::get_nearest_color_index(const std::vector<Color32> &palette, uint8_t R, uint8_t G, uint8_t B);
-	extern template CubeMapper::CubeMapper(const std::vector<Color24> &palette);
-	extern template CubeMapper::CubeMapper(const std::vector<Color32> &palette);
+	extern template size_t Rgb2I::get_nearest_color_index(const std::vector<Color24> &palette, uint8_t R, uint8_t G, uint8_t B);
+	extern template size_t Rgb2I::get_nearest_color_index(const std::vector<Color32> &palette, uint8_t R, uint8_t G, uint8_t B);
+	extern template Rgb2I::Rgb2I(const std::vector<Color24> &palette);
+	extern template Rgb2I::Rgb2I(const std::vector<Color32> &palette);
 };
 
