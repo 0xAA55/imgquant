@@ -153,7 +153,7 @@ namespace pngcpp
 		{
 			image.format = PNG_FORMAT_RGBA;
 			bmp = Bitmap<ColorRgba>(image.width, image.height);
-			if (!png_image_finish_read(&image, NULL, bmp.get_bitmap(), 0, NULL))
+			if (!png_image_finish_read(&image, NULL, bmp.get_bitmap(), static_cast<png_int_32>(bmp.get_pitch()), NULL))
 			{
 				throw LoadPngException(std::string("Read png file failed: \"") + path + "\"");
 			}
