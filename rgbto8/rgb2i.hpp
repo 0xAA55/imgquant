@@ -4,11 +4,11 @@
 #include <vector>
 #include <cstddef>
 
-#include "paldef.hpp"
+#include <bitmap/bitmap.hpp>
 
 namespace rgb2i
 {
-	using namespace paldef;
+	using namespace bitmap;
 
 	class Rgb2I
 	{
@@ -17,12 +17,12 @@ namespace rgb2i
 		std::vector<uint8_t> mapper;
 		std::vector<std::vector<uint8_t *>> router;
 #else
-		std::vector<Color24> palette;
+		std::vector<ColorRgb> palette;
 #endif
 
 	public:
 		Rgb2I() = delete;
-		template<Rgb_c T>
+		template<typename T>
 		Rgb2I(const std::vector<T> &palette)
 		{
 #if USE_MAPPER
@@ -55,13 +55,13 @@ namespace rgb2i
 #else
 			for (auto &c : palette)
 			{
-				this->palette.push_back(Color24{c.R, c.G, c.B});
+				this->palette.push_back(ColorRgb{c.R, c.G, c.B});
 			}
 #endif
 		}
 
 
-		template<Rgb_c T>
+		template<typename T>
 		static size_t get_nearest_color_index(const std::vector<T> &palette, uint8_t R, uint8_t G, uint8_t B)
 		{
 			size_t best_i = 0;
@@ -91,9 +91,9 @@ namespace rgb2i
 		}
 	};
 
-	extern template size_t Rgb2I::get_nearest_color_index(const std::vector<Color24> &palette, uint8_t R, uint8_t G, uint8_t B);
-	extern template size_t Rgb2I::get_nearest_color_index(const std::vector<Color32> &palette, uint8_t R, uint8_t G, uint8_t B);
-	extern template Rgb2I::Rgb2I(const std::vector<Color24> &palette);
-	extern template Rgb2I::Rgb2I(const std::vector<Color32> &palette);
+	extern template size_t Rgb2I::get_nearest_color_index(const std::vector<ColorRgb> &palette, uint8_t R, uint8_t G, uint8_t B);
+	extern template size_t Rgb2I::get_nearest_color_index(const std::vector<ColorRgba> &palette, uint8_t R, uint8_t G, uint8_t B);
+	extern template Rgb2I::Rgb2I(const std::vector<ColorRgb> &palette);
+	extern template Rgb2I::Rgb2I(const std::vector<ColorRgba> &palette);
 };
 

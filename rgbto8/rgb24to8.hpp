@@ -3,28 +3,28 @@
 #include <cinttypes>
 #include <vector>
 
-#include "paldef.hpp"
+#include <bitmap/bitmap.hpp>
+
+#include "rgb2i.hpp"
 #include "octree.hpp"
 #include "dither.hpp"
-#include "rgb2i.hpp"
 
 namespace rgb24to8
 {
-	using namespace paldef;
-	using namespace octree;
-	using namespace dither;
 	using namespace rgb2i;
+	using namespace octree;
+	using namespace bitmap;
+	using namespace dither;
 
-	template<Rgb_c T_pixel, Rgb_c T_palette>
-	void rgb24to8(uint32_t src_width, uint32_t src_height, T_pixel **src_row_pointers,
-		std::vector<uint8_t> &bitmap_out,
-		std::vector<T_palette> &palette_out,
-		std::vector<uint8_t *> *row_pointers_out)
+	template<typename T_pixel, typename T_palette>
+	Bitmap<uint8_t> rgb24to8(const Bitmap<T_pixel>& src, std::vector<T_palette> &palette_out)
 	{
+		uint32_t src_width = src.get_width();
+		uint32_t src_height = src.get_height();
 		auto palette_gen = PaletteGenerator();
 		for (uint32_t y = 0; y < src_height; y++)
 		{
-			auto row = src_row_pointers[y];
+			auto row = src.get_row(y);
 			for (uint32_t x = 0; x < src_width; x++)
 			{
 				auto pix = row[x];
@@ -48,45 +48,12 @@ namespace rgb24to8
 		if (palette_out.size() < 256) palette_out.push_back(T_palette{ 0, 0, 0 });
 		if (palette_out.size() < 256) palette_out.push_back(T_palette{ 255, 255, 255 });
 
-		size_t pitch = (static_cast<size_t>(src_width - 1) / 4 + 1) * 4;
-		bitmap_out.resize(pitch * src_height);
-		auto dst_row_pointers = std::vector<uint8_t *>();
-
-		for (uint32_t y = 0; y < src_height; y++)
-		{
-			auto dst_row = &bitmap_out[pitch * y];
-			dst_row_pointers.push_back(dst_row);
-		}
-
 		auto ditherer = Ditherer(palette_out);
-		ditherer.ApplyOrdered(src_width, src_height, src_row_pointers);
-		ditherer.ApplyDiffusion(src_width, src_height, src_row_pointers, &dst_row_pointers[0]);
-
-		if (row_pointers_out) *row_pointers_out = dst_row_pointers;
+		auto ordered = ditherer.ApplyOrdered<ColorRgba, IColorRgba>(src);
+		return ditherer.ApplyDiffusion(ordered);
 	}
 
-	extern template
-		void rgb24to8(uint32_t src_width, uint32_t src_height, Color24 **src_row_pointers,
-			std::vector<uint8_t> &bitmap_out,
-			std::vector<Color24> &palette_out,
-			std::vector<uint8_t *> *row_pointers_out);
-
-	extern template
-		void rgb24to8(uint32_t src_width, uint32_t src_height, Color32 **src_row_pointers,
-			std::vector<uint8_t> &bitmap_out,
-			std::vector<Color24> &palette_out,
-			std::vector<uint8_t *> *row_pointers_out);
-
-	extern template
-		void rgb24to8(uint32_t src_width, uint32_t src_height, Color24 **src_row_pointers,
-			std::vector<uint8_t> &bitmap_out,
-			std::vector<Color32> &palette_out,
-			std::vector<uint8_t *> *row_pointers_out);
-
-	extern template
-		void rgb24to8(uint32_t src_width, uint32_t src_height, Color32 **src_row_pointers,
-			std::vector<uint8_t> &bitmap_out,
-			std::vector<Color32> &palette_out,
-			std::vector<uint8_t *> *row_pointers_out);
+	extern template Bitmap<uint8_t> rgb24to8(const Bitmap<ColorRgba>& src, std::vector<ColorRgb> &palette_out);
+	extern template Bitmap<uint8_t> rgb24to8(const Bitmap<ColorRgba>& src, std::vector<ColorRgba> &palette_out);
 };
 
