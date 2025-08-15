@@ -4,7 +4,7 @@ LDLIBS=-lstdc++ -lpng -lbitmap -lpngcpp -lrgbto8 -lgomp
 OBJS=main.o
 
 imgquant: $(OBJS) ../bitmap/libbitmap.a ../pngcpp/libpngcpp.a ../rgbto8/librgbto8.a
-	$(CC) $(OBJS) -o $@ $(LDLIBS) $(LDFLAGS)
+	$(CC) $(CXXFLAGS) $(OBJS) -o $@ $(LDLIBS) $(LDFLAGS)
 
 ../bitmap/libbitmap.a:
 	make -C ../bitmap
