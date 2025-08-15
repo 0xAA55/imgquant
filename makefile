@@ -13,3 +13,4 @@ clean:
 	make -C imgquant clean
 	make -C pngcpp clean
 	make -C rgbto8 clean
+	make -C bitmap clean
