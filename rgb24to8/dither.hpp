@@ -93,6 +93,7 @@ namespace dither
 			}
 		}
 
+		void ApplyOrdered(uint32_t width, uint32_t height, uint8_t **row_pointers) const;
 		template<Rgb_c Pixel>
 		QuantError get_quant_error(Pixel& src_pix, uint8_t dst_pix)
 		{

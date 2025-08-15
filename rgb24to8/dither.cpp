@@ -29,4 +29,19 @@ namespace dither
 	template void Ditherer::ApplyOrdered(uint32_t width, uint32_t height, Color32 **row_pointers) const;
 	template void Ditherer::ApplyDiffusion(uint32_t width, uint32_t height, Color24 **row_pointers, uint8_t **out_row_pointers);
 	template void Ditherer::ApplyDiffusion(uint32_t width, uint32_t height, Color32 **row_pointers, uint8_t **out_row_pointers);
+	void Ditherer::ApplyOrdered(uint32_t width, uint32_t height, uint8_t **row_pointers) const
+	{
+#pragma omp parallel for
+		for (std::ptrdiff_t y = 0; y < static_cast<std::ptrdiff_t>(height); y++)
+		{
+			auto *row = row_pointers[y];
+			for (std::ptrdiff_t x = 0; x < static_cast<std::ptrdiff_t>(width); x++)
+			{
+				auto &pix = row[x];
+				int dm = dither_matrix[(x & 0xFF) + (y & 0xFF) * 256] + 128;
+				if (pix > dm) pix = 255;
+				else pix = 0;
+			}
+		}
+	}
 };
