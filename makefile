@@ -1,4 +1,4 @@
-CXXFLAGS=-I. -I.. -std=c++20 -O3 -flto
+CXXFLAGS=-I. -I.. -std=c++20 -O3 -flto -fopenmp
 
 all: quant
 

@@ -1,4 +1,4 @@
-CXXFLAGS=-std=c++20 -O3 -flto
+CXXFLAGS=-std=c++20 -O3 -flto -ffat-lto-objects -fopenmp
 
 all: libbitmap.a
 

@@ -1,6 +1,6 @@
-CXXFLAGS=-I.. -std=c++20 -O3 -flto
+CXXFLAGS=-I.. -std=c++20 -O3 -flto -ffat-lto-objects -fopenmp
 LDFLAGS=-L../bitmap -L../pngcpp -L../rgbto8
-LDLIBS=-lstdc++ -lpng -lbitmap -lpngcpp -lrgbto8
+LDLIBS=-lstdc++ -lpng -lbitmap -lpngcpp -lrgbto8 -lgomp
 OBJS=main.o
 
 imgquant: $(OBJS) ../bitmap/libbitmap.a ../pngcpp/libpngcpp.a ../rgbto8/librgbto8.a
