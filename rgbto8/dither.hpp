@@ -121,7 +121,8 @@ namespace dither
 		{
 			uint32_t width = src.get_width();
 			uint32_t height = src.get_height();
-			auto canvas = src.convert<IColorRgb>([](const Pixel& s) -> IColorRgb {
+			auto canvas = convert<Pixel, IColorRgb>(src, [](const Pixel & s) ->IColorRgb
+			{
 				return IColorRgb{
 					s.R,
 					s.G,

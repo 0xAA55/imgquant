@@ -41,7 +41,7 @@ namespace dither
 
 	Bitmap<uint8_t> Ditherer::ApplyAlphaDither(const Bitmap<ColorRgba>& src) const
 	{
-		auto ret = src.convert<uint8_t>([](const ColorRgba& c) -> uint8_t { return c.A; });
+		auto ret = convert<ColorRgba, uint8_t>(src, [](const ColorRgba& c) -> uint8_t { return c.A; });
 #pragma omp parallel for
 		for (int y = 0; y < static_cast<int>(ret.get_height()); y++)
 		{
