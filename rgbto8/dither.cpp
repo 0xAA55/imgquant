@@ -49,7 +49,7 @@ namespace dither
 			for (int x = 0; x < static_cast<int>(ret.get_width()); x++)
 			{
 				auto &pix = row[x];
-				if (pix > sample_matrix(x, y) + 128) pix = 255;
+				if (pix >= sample_matrix(x, y) + 128) pix = 255;
 				else pix = 0;
 			}
 		}
