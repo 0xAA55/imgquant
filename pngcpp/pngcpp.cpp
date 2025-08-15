@@ -61,7 +61,7 @@ namespace pngcpp
 			png_destroy_write_struct(&p, &i);
 		}
 
-		void write_png_rgba(const std::string &path, uint32_t width, uint32_t height, const Pixel * const*row_pointers) const
+		void write_png_rgba(const std::string &path, uint32_t width, uint32_t height, const ColorRgba*const* row_pointers) const
 		{
 			auto fp = File(path.c_str(), "wb");
 
@@ -81,7 +81,7 @@ namespace pngcpp
 			png_write_end(p, i);
 		}
 
-		void write_png_8bit(const std::string &path, uint32_t width, uint32_t height, const Rgb *palette, size_t num_palette_entries, const uint8_t *const *row_pointers) const
+		void write_png_8bit(const std::string &path, uint32_t width, uint32_t height, const ColorRgb *palette, size_t num_palette_entries, const uint8_t *const *row_pointers) const
 		{
 			auto fp = File(path.c_str(), "wb");
 
@@ -100,7 +100,7 @@ namespace pngcpp
 			png_write_end(p, i);
 		}
 
-		void write_png_8bit(const std::string &path, uint32_t width, uint32_t height, const Rgba *palette, size_t num_palette_entries, const uint8_t *const *row_pointers) const
+		void write_png_8bit(const std::string &path, uint32_t width, uint32_t height, const ColorRgba *palette, size_t num_palette_entries, const uint8_t *const *row_pointers) const
 		{
 			auto fp = File(path.c_str(), "wb");
 
@@ -113,12 +113,12 @@ namespace pngcpp
 				PNG_COMPRESSION_TYPE_DEFAULT,
 				PNG_FILTER_TYPE_DEFAULT);
 
-			auto RgbPalette = std::vector<Rgb>();
+			auto RgbPalette = std::vector<ColorRgb>();
 			auto AlphaPeltte = std::vector<uint8_t>();
 			for (size_t i = 0; i < num_palette_entries; i++)
 			{
 				auto &entry = palette[i];
-				RgbPalette.push_back(Rgb{
+				RgbPalette.push_back(ColorRgb{
 					entry.R,
 					entry.G,
 					entry.B,
@@ -139,12 +139,8 @@ namespace pngcpp
 		}
 	};
 
-	PngImage::PngImage(uint32_t width, uint32_t height, const Pixel &default_color) :
-		width(width), height(height)
+	PngImage::PngImage(uint32_t width, uint32_t height, const ColorRgba &default_color) : bmp(width, height, default_color)
 	{
-		pixels.resize(static_cast<size_t>(width) * height);
-		for (size_t i = 0; i < pixels.size(); i++) pixels[i] = default_color;
-		for (size_t y = 0; y < height; y++) row_pointers.push_back(&pixels[y * width]);
 	}
 	PngImage::PngImage(const char *path) : PngImage(std::string(path))
 	{
@@ -156,11 +152,8 @@ namespace pngcpp
 		if (png_image_begin_read_from_file(&image, path.c_str()))
 		{
 			image.format = PNG_FORMAT_RGBA;
-			width = image.width;
-			height = image.height;
-			pixels.resize(static_cast<size_t>(width) * height);
-			for (size_t y = 0; y < height; y++) row_pointers.push_back(&pixels[y * width]);
-			if (!png_image_finish_read(&image, NULL, &pixels[0], 0, NULL))
+			bmp = Bitmap<ColorRgba>(image.width, image.height);
+			if (!png_image_finish_read(&image, NULL, bmp.get_bitmap(), 0, NULL))
 			{
 				throw LoadPngException(std::string("Read png file failed: \"") + path + "\"");
 			}
@@ -172,51 +165,51 @@ namespace pngcpp
 	}
 	uint32_t PngImage::get_width() const
 	{
-		return width;
+		return bmp.get_width();
 	}
 	uint32_t PngImage::get_height() const
 	{
-		return height;
+		return bmp.get_height();
 	}
-	Pixel **PngImage::get_row_pointers()
+	ColorRgba **PngImage::get_row_pointers()
 	{
-		return &row_pointers[0];
+		return bmp.get_row_pointers();
 	}
-	const Pixel *const *PngImage::get_row_pointers() const
+	const ColorRgba*const* PngImage::get_row_pointers() const
 	{
-		return &row_pointers[0];
+		return bmp.get_row_pointers();
 	}
-	const Pixel &PngImage::get_pixel(uint32_t x, uint32_t y) const
+	const ColorRgba &PngImage::get_pixel(uint32_t x, uint32_t y) const
 	{
-		if (x >= width || y >= height) throw InvalidArgument(std::string("Invalid coordinate (") + std::to_string(x) + ", " + std::to_string(y) + ")");
-		return row_pointers[y][x];
+		if (x >= get_width() || y >= get_height()) throw InvalidArgument(std::string("Invalid coordinate (") + std::to_string(x) + ", " + std::to_string(y) + ")");
+		return bmp.get_row(y)[x];
 	}
-	Pixel &PngImage::get_pixel(uint32_t x, uint32_t y)
+	ColorRgba &PngImage::get_pixel(uint32_t x, uint32_t y)
 	{
-		if (x >= width || y >= height) throw InvalidArgument(std::string("Invalid coordinate (") + std::to_string(x) + ", " + std::to_string(y) + ")");
-		return row_pointers[y][x];
+		if (x >= get_width() || y >= get_height()) throw InvalidArgument(std::string("Invalid coordinate (") + std::to_string(x) + ", " + std::to_string(y) + ")");
+		return bmp.get_row(y)[x];
 	}
-	void PngImage::set_pixel(uint32_t x, uint32_t y, const Pixel &pixel)
+	void PngImage::set_pixel(uint32_t x, uint32_t y, const ColorRgba &pixel)
 	{
-		if (x >= width || y >= height) throw InvalidArgument(std::string("Invalid coordinate (") + std::to_string(x) + ", " + std::to_string(y) + ")");
-		row_pointers[y][x] = pixel;
+		if (x >= get_width() || y >= get_height()) throw InvalidArgument(std::string("Invalid coordinate (") + std::to_string(x) + ", " + std::to_string(y) + ")");
+		bmp.get_row(y)[x] = pixel;
 	}
 	void PngImage::save_png32_to(const std::string &path) const
 	{
 		auto w = png_writer();
-		w.write_png_rgba(path, width, height, &row_pointers[0]);
+		w.write_png_rgba(path, get_width(), get_height(), bmp.get_row_pointers());
 	}
-	void PngImage::save_png32_to(const std::string &path, uint32_t width, uint32_t height, const Pixel *const *row_pointers)
+	void PngImage::save_png32_to(const std::string &path, uint32_t width, uint32_t height, const ColorRgba *const *row_pointers)
 	{
 		auto w = png_writer();
 		w.write_png_rgba(path, width, height, &row_pointers[0]);
 	}
-	void PngImage::save_png8_to(const std::string &path, uint32_t width, uint32_t height, const Rgb *palette, size_t num_palette_entries, const uint8_t *const *row_pointers)
+	void PngImage::save_png8_to(const std::string &path, uint32_t width, uint32_t height, const ColorRgb *palette, size_t num_palette_entries, const uint8_t *const *row_pointers)
 	{
 		auto w = png_writer();
 		w.write_png_8bit(path, width, height, palette, num_palette_entries, &row_pointers[0]);
 	}
-	void PngImage::save_png8_to(const std::string &path, uint32_t width, uint32_t height, const Rgba *palette, size_t num_palette_entries, const uint8_t *const *row_pointers)
+	void PngImage::save_png8_to(const std::string &path, uint32_t width, uint32_t height, const ColorRgba *palette, size_t num_palette_entries, const uint8_t *const *row_pointers)
 	{
 		auto w = png_writer();
 		w.write_png_8bit(path, width, height, palette, num_palette_entries, &row_pointers[0]);
