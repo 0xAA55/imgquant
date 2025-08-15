@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bitmap.hpp" />
     <ClInclude Include="rgb2i.hpp" />
     <ClInclude Include="dither.hpp" />
     <ClInclude Include="octree.hpp" />
@@ -27,6 +28,7 @@
     <ClInclude Include="rgb32to8.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="bitmap.cpp" />
     <ClCompile Include="rgb2i.cpp" />
     <ClCompile Include="dither.cpp" />
     <ClCompile Include="octree.cpp" />
