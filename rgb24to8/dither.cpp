@@ -44,4 +44,14 @@ namespace dither
 			}
 		}
 	}
+	QuantError Ditherer::get_quant_error(QuantError & src_pix, uint8_t dst_pix) const
+	{
+		auto& dst_col = palette[dst_pix];
+		return QuantError
+		{
+			src_pix.R - static_cast<int>(dst_col.R),
+			src_pix.G - static_cast<int>(dst_col.G),
+			src_pix.B - static_cast<int>(dst_col.B),
+		};
+	}
 };

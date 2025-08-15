@@ -94,17 +94,7 @@ namespace dither
 		}
 
 		void ApplyOrdered(uint32_t width, uint32_t height, uint8_t **row_pointers) const;
-		template<Rgb_c Pixel>
-		QuantError get_quant_error(Pixel& src_pix, uint8_t dst_pix)
-		{
-			auto dst_col = palette[dst_pix];
-			return QuantError
-			{
-				static_cast<int>(src_pix.R) - static_cast<int>(dst_col.R),
-				static_cast<int>(src_pix.G) - static_cast<int>(dst_col.G),
-				static_cast<int>(src_pix.B) - static_cast<int>(dst_col.B),
-			};
-		}
+		QuantError get_quant_error(QuantError& src_pix, uint8_t dst_pix) const;
 
 		template<Rgb_c Pixel>
 		static void diffuse_error(Pixel &target, QuantError& error, int numerator, int denominator)
