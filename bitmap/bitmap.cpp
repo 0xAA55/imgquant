@@ -97,26 +97,6 @@ namespace bitmap
 	}
 
 	template<typename T>
-	template<typename T_dst>
-	Bitmap<T_dst> Bitmap<T>::convert(T_dst(*convert_fn)(const T& src)) const
-	{
-		auto ret = Bitmap<T_dst>(width, height);
-		auto ret_row = ret.get_row_pointers();
-#pragma omp parallel for
-		for (std::ptrdiff_t y = 0; y < static_cast<std::ptrdiff_t>(height); y++)
-		{
-			auto src_row = row_pointers[y];
-			auto dst_row = ret_row[y];
-			for (size_t x = 0; x < width; x++)
-			{
-				dst_row[x] = convert_fn(src_row[x]);
-			}
-		}
-
-		return ret;
-	}
-
-	template<typename T>
 	T* Bitmap<T>::get_bitmap()
 	{
 		return bitmap;
@@ -201,41 +181,41 @@ namespace bitmap
 	template class Bitmap<IColorRgb>;
 	template class Bitmap<IColorRgba>;
 
-	template Bitmap<int       > Bitmap<int       >::convert(int       (*convert_fn)(const int       & src)) const;
-	template Bitmap<uint8_t   > Bitmap<int       >::convert(uint8_t   (*convert_fn)(const int       & src)) const;
-	template Bitmap<ColorRgb  > Bitmap<int       >::convert(ColorRgb  (*convert_fn)(const int       & src)) const;
-	template Bitmap<ColorRgba > Bitmap<int       >::convert(ColorRgba (*convert_fn)(const int       & src)) const;
-	template Bitmap<IColorRgb > Bitmap<int       >::convert(IColorRgb (*convert_fn)(const int       & src)) const;
-	template Bitmap<IColorRgba> Bitmap<int       >::convert(IColorRgba(*convert_fn)(const int       & src)) const;
-	template Bitmap<int       > Bitmap<uint8_t   >::convert(int       (*convert_fn)(const uint8_t   & src)) const;
-	template Bitmap<uint8_t   > Bitmap<uint8_t   >::convert(uint8_t   (*convert_fn)(const uint8_t   & src)) const;
-	template Bitmap<ColorRgb  > Bitmap<uint8_t   >::convert(ColorRgb  (*convert_fn)(const uint8_t   & src)) const;
-	template Bitmap<ColorRgba > Bitmap<uint8_t   >::convert(ColorRgba (*convert_fn)(const uint8_t   & src)) const;
-	template Bitmap<IColorRgb > Bitmap<uint8_t   >::convert(IColorRgb (*convert_fn)(const uint8_t   & src)) const;
-	template Bitmap<IColorRgba> Bitmap<uint8_t   >::convert(IColorRgba(*convert_fn)(const uint8_t   & src)) const;
-	template Bitmap<int       > Bitmap<ColorRgb  >::convert(int       (*convert_fn)(const ColorRgb  & src)) const;
-	template Bitmap<uint8_t   > Bitmap<ColorRgb  >::convert(uint8_t   (*convert_fn)(const ColorRgb  & src)) const;
-	template Bitmap<ColorRgb  > Bitmap<ColorRgb  >::convert(ColorRgb  (*convert_fn)(const ColorRgb  & src)) const;
-	template Bitmap<ColorRgba > Bitmap<ColorRgb  >::convert(ColorRgba (*convert_fn)(const ColorRgb  & src)) const;
-	template Bitmap<IColorRgb > Bitmap<ColorRgb  >::convert(IColorRgb (*convert_fn)(const ColorRgb  & src)) const;
-	template Bitmap<IColorRgba> Bitmap<ColorRgb  >::convert(IColorRgba(*convert_fn)(const ColorRgb  & src)) const;
-	template Bitmap<int       > Bitmap<ColorRgba >::convert(int       (*convert_fn)(const ColorRgba & src)) const;
-	template Bitmap<uint8_t   > Bitmap<ColorRgba >::convert(uint8_t   (*convert_fn)(const ColorRgba & src)) const;
-	template Bitmap<ColorRgb  > Bitmap<ColorRgba >::convert(ColorRgb  (*convert_fn)(const ColorRgba & src)) const;
-	template Bitmap<ColorRgba > Bitmap<ColorRgba >::convert(ColorRgba (*convert_fn)(const ColorRgba & src)) const;
-	template Bitmap<IColorRgb > Bitmap<ColorRgba >::convert(IColorRgb (*convert_fn)(const ColorRgba & src)) const;
-	template Bitmap<IColorRgba> Bitmap<ColorRgba >::convert(IColorRgba(*convert_fn)(const ColorRgba & src)) const;
-	template Bitmap<int       > Bitmap<IColorRgb >::convert(int       (*convert_fn)(const IColorRgb & src)) const;
-	template Bitmap<uint8_t   > Bitmap<IColorRgb >::convert(uint8_t   (*convert_fn)(const IColorRgb & src)) const;
-	template Bitmap<ColorRgb  > Bitmap<IColorRgb >::convert(ColorRgb  (*convert_fn)(const IColorRgb & src)) const;
-	template Bitmap<ColorRgba > Bitmap<IColorRgb >::convert(ColorRgba (*convert_fn)(const IColorRgb & src)) const;
-	template Bitmap<IColorRgb > Bitmap<IColorRgb >::convert(IColorRgb (*convert_fn)(const IColorRgb & src)) const;
-	template Bitmap<IColorRgba> Bitmap<IColorRgb >::convert(IColorRgba(*convert_fn)(const IColorRgb & src)) const;
-	template Bitmap<int       > Bitmap<IColorRgba>::convert(int       (*convert_fn)(const IColorRgba& src)) const;
-	template Bitmap<uint8_t   > Bitmap<IColorRgba>::convert(uint8_t   (*convert_fn)(const IColorRgba& src)) const;
-	template Bitmap<ColorRgb  > Bitmap<IColorRgba>::convert(ColorRgb  (*convert_fn)(const IColorRgba& src)) const;
-	template Bitmap<ColorRgba > Bitmap<IColorRgba>::convert(ColorRgba (*convert_fn)(const IColorRgba& src)) const;
-	template Bitmap<IColorRgb > Bitmap<IColorRgba>::convert(IColorRgb (*convert_fn)(const IColorRgba& src)) const;
-	template Bitmap<IColorRgba> Bitmap<IColorRgba>::convert(IColorRgba(*convert_fn)(const IColorRgba& src)) const;
+	template Bitmap<int       > convert(const Bitmap<int       >& src, int       (*convert_fn)(const int       & src));
+	template Bitmap<uint8_t   > convert(const Bitmap<int       >& src, uint8_t   (*convert_fn)(const int       & src));
+	template Bitmap<ColorRgb  > convert(const Bitmap<int       >& src, ColorRgb  (*convert_fn)(const int       & src));
+	template Bitmap<ColorRgba > convert(const Bitmap<int       >& src, ColorRgba (*convert_fn)(const int       & src));
+	template Bitmap<IColorRgb > convert(const Bitmap<int       >& src, IColorRgb (*convert_fn)(const int       & src));
+	template Bitmap<IColorRgba> convert(const Bitmap<int       >& src, IColorRgba(*convert_fn)(const int       & src));
+	template Bitmap<int       > convert(const Bitmap<uint8_t   >& src, int       (*convert_fn)(const uint8_t   & src));
+	template Bitmap<uint8_t   > convert(const Bitmap<uint8_t   >& src, uint8_t   (*convert_fn)(const uint8_t   & src));
+	template Bitmap<ColorRgb  > convert(const Bitmap<uint8_t   >& src, ColorRgb  (*convert_fn)(const uint8_t   & src));
+	template Bitmap<ColorRgba > convert(const Bitmap<uint8_t   >& src, ColorRgba (*convert_fn)(const uint8_t   & src));
+	template Bitmap<IColorRgb > convert(const Bitmap<uint8_t   >& src, IColorRgb (*convert_fn)(const uint8_t   & src));
+	template Bitmap<IColorRgba> convert(const Bitmap<uint8_t   >& src, IColorRgba(*convert_fn)(const uint8_t   & src));
+	template Bitmap<int       > convert(const Bitmap<ColorRgb  >& src, int       (*convert_fn)(const ColorRgb  & src));
+	template Bitmap<uint8_t   > convert(const Bitmap<ColorRgb  >& src, uint8_t   (*convert_fn)(const ColorRgb  & src));
+	template Bitmap<ColorRgb  > convert(const Bitmap<ColorRgb  >& src, ColorRgb  (*convert_fn)(const ColorRgb  & src));
+	template Bitmap<ColorRgba > convert(const Bitmap<ColorRgb  >& src, ColorRgba (*convert_fn)(const ColorRgb  & src));
+	template Bitmap<IColorRgb > convert(const Bitmap<ColorRgb  >& src, IColorRgb (*convert_fn)(const ColorRgb  & src));
+	template Bitmap<IColorRgba> convert(const Bitmap<ColorRgb  >& src, IColorRgba(*convert_fn)(const ColorRgb  & src));
+	template Bitmap<int       > convert(const Bitmap<ColorRgba >& src, int       (*convert_fn)(const ColorRgba & src));
+	template Bitmap<uint8_t   > convert(const Bitmap<ColorRgba >& src, uint8_t   (*convert_fn)(const ColorRgba & src));
+	template Bitmap<ColorRgb  > convert(const Bitmap<ColorRgba >& src, ColorRgb  (*convert_fn)(const ColorRgba & src));
+	template Bitmap<ColorRgba > convert(const Bitmap<ColorRgba >& src, ColorRgba (*convert_fn)(const ColorRgba & src));
+	template Bitmap<IColorRgb > convert(const Bitmap<ColorRgba >& src, IColorRgb (*convert_fn)(const ColorRgba & src));
+	template Bitmap<IColorRgba> convert(const Bitmap<ColorRgba >& src, IColorRgba(*convert_fn)(const ColorRgba & src));
+	template Bitmap<int       > convert(const Bitmap<IColorRgb >& src, int       (*convert_fn)(const IColorRgb & src));
+	template Bitmap<uint8_t   > convert(const Bitmap<IColorRgb >& src, uint8_t   (*convert_fn)(const IColorRgb & src));
+	template Bitmap<ColorRgb  > convert(const Bitmap<IColorRgb >& src, ColorRgb  (*convert_fn)(const IColorRgb & src));
+	template Bitmap<ColorRgba > convert(const Bitmap<IColorRgb >& src, ColorRgba (*convert_fn)(const IColorRgb & src));
+	template Bitmap<IColorRgb > convert(const Bitmap<IColorRgb >& src, IColorRgb (*convert_fn)(const IColorRgb & src));
+	template Bitmap<IColorRgba> convert(const Bitmap<IColorRgb >& src, IColorRgba(*convert_fn)(const IColorRgb & src));
+	template Bitmap<int       > convert(const Bitmap<IColorRgba>& src, int       (*convert_fn)(const IColorRgba& src));
+	template Bitmap<uint8_t   > convert(const Bitmap<IColorRgba>& src, uint8_t   (*convert_fn)(const IColorRgba& src));
+	template Bitmap<ColorRgb  > convert(const Bitmap<IColorRgba>& src, ColorRgb  (*convert_fn)(const IColorRgba& src));
+	template Bitmap<ColorRgba > convert(const Bitmap<IColorRgba>& src, ColorRgba (*convert_fn)(const IColorRgba& src));
+	template Bitmap<IColorRgb > convert(const Bitmap<IColorRgba>& src, IColorRgb (*convert_fn)(const IColorRgba& src));
+	template Bitmap<IColorRgba> convert(const Bitmap<IColorRgba>& src, IColorRgba(*convert_fn)(const IColorRgba& src));
 };
 
