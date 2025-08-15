@@ -98,21 +98,45 @@ namespace dither
 		static void diffuse_error(QuantError &target, QuantError& error, int numerator, int denominator);
 
 		template<Rgb_c Pixel>
+		void ApplyDiffusion(uint32_t width, uint32_t height, const Pixel*const* row_pointers, uint8_t **out_row_pointers)
 		{
-		void ApplyDiffusion(uint32_t width, uint32_t height, Pixel **row_pointers, uint8_t **out_row_pointers)
-		{
+			auto canvas = std::vector<QuantError>();
+			auto canvas_row_ptr = std::vector<QuantError*>();
+			canvas.resize(static_cast<size_t>(width) * height);
+			canvas_row_ptr.resize(height);
+#pragma omp parallel for
+			for (std::ptrdiff_t y = 0; y < static_cast<std::ptrdiff_t>(height); y++)
+			{
+				canvas_row_ptr[y] = &canvas[y * width];
+				auto src_row = row_pointers[y];
+				auto dst_row = canvas_row_ptr[y];
+				for (size_t x = 0; x < width; x++)
+				{
+					auto &src_pix = src_row[x];
+					auto &dst_pix = dst_row[x];
+					dst_pix = QuantError{
+						src_pix.R,
+						src_pix.G,
+						src_pix.B
+					};
+				}
+			}
 			for (size_t y = 0; y < static_cast<size_t>(height); y++)
 			{
-				auto src_row = row_pointers[y];
+				auto src_row = canvas_row_ptr[y];
 				auto dst_row = out_row_pointers[y];
 				bool is_last_line = (y == static_cast<size_t>(height) - 1);
-				auto src_row_2 = is_last_line ? row_pointers[y] : row_pointers[y + 1];
+				auto src_row_2 = is_last_line ? canvas_row_ptr[y] : canvas_row_ptr[y + 1];
 				for (size_t x = 0; x < static_cast<size_t>(width); x++)
 				{
 					bool is_first_pix = (x == 0);
 					bool is_last_pix = (x == static_cast<size_t>(width) - 1);
 					auto &src_pix = src_row[x];
-					auto dst_pix = palette_mapper.get_color_index(src_pix.R, src_pix.G, src_pix.B);
+					auto dst_pix = palette_mapper.get_color_index(
+						std::max(std::min(src_pix.R, 255), 0),
+						std::max(std::min(src_pix.G, 255), 0),
+						std::max(std::min(src_pix.B, 255), 0)
+					);
 					dst_row[x] = dst_pix;
 					auto quant_error = get_quant_error(src_pix, dst_pix);
 					if (!is_last_line)
@@ -131,6 +155,6 @@ namespace dither
 	extern template Ditherer::Ditherer(const std::vector<Color32> &palette);
 	extern template void Ditherer::ApplyOrdered(uint32_t width, uint32_t height, Color24 **row_pointers) const;
 	extern template void Ditherer::ApplyOrdered(uint32_t width, uint32_t height, Color32 **row_pointers) const;
-	extern template void Ditherer::ApplyDiffusion(uint32_t width, uint32_t height, Color24 **row_pointers, uint8_t **out_row_pointers);
-	extern template void Ditherer::ApplyDiffusion(uint32_t width, uint32_t height, Color32 **row_pointers, uint8_t **out_row_pointers);
+	extern template void Ditherer::ApplyDiffusion(uint32_t width, uint32_t height, const Color24*const* row_pointers, uint8_t **out_row_pointers);
+	extern template void Ditherer::ApplyDiffusion(uint32_t width, uint32_t height, const Color32*const* row_pointers, uint8_t **out_row_pointers);
 };
