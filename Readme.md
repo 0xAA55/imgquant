@@ -30,5 +30,5 @@ Optional parameter: `--preserve-alpha`, if used, will preserve the alpha channel
 
 * RGB images are compressed to within one-third of their original size.
 * RGBA images have their transparency channel discarded, resulting in a compression of less than one-quarter their original size.
-  * Use `--preserve-alpha` to preserve the alpha channel, but the compression effect (file size reduction) will be significantly reduced.
+  * Using `--preserve-alpha` will generate an image with the alpha channel dithered and the volume compressed to less than a quarter.
 * Generally, compression is most pronounced for bitmaps with fewer colors.
