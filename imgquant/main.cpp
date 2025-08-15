@@ -75,7 +75,7 @@ namespace rgb24to8
         try
 #endif // !_DEBUG
         {
-            auto src_png = std::move(PngImage(src_png_path).get_bmp());
+            Bitmap<ColorRgba> src_png = std::move(PngImage(src_png_path).get_bmp());
             std::vector<ColorRgb> palette_out;
             auto ibmp = rgb24to8(src_png, palette_out);
 
