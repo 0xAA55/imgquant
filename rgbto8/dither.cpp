@@ -25,8 +25,8 @@ namespace dither
 
 	template Ditherer::Ditherer(const std::vector<Color24> &palette);
 	template Ditherer::Ditherer(const std::vector<Color32> &palette);
-	template void Ditherer::ApplyOrdered(uint32_t width, uint32_t height, Color24 **row_pointers) const;
-	template void Ditherer::ApplyOrdered(uint32_t width, uint32_t height, Color32 **row_pointers) const;
+	template void Ditherer::ApplyOrdered(Bitmap<Color24>& to_apply) const;
+	template void Ditherer::ApplyOrdered(Bitmap<Color32>& to_apply) const;
 	template void Ditherer::ApplyDiffusion(uint32_t width, uint32_t height, const Color24*const* row_pointers, uint8_t **out_row_pointers);
 	template void Ditherer::ApplyDiffusion(uint32_t width, uint32_t height, const Color32*const* row_pointers, uint8_t **out_row_pointers);
 

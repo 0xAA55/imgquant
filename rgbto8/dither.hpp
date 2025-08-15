@@ -5,10 +5,12 @@
 #include <algorithm>
 
 #include "rgb2i.hpp"
+#include "bitmap.hpp"
 
 namespace dither
 {
 	using namespace rgb2i;
+	using namespace bitmap;
 
 	struct QuantError
 	{
@@ -74,14 +76,16 @@ namespace dither
 		}
 
 		template<Rgb_c Pixel>
-		void ApplyOrdered(uint32_t width, uint32_t height, Pixel **row_pointers) const
+		void ApplyOrdered(Bitmap<Pixel>& to_apply) const
 		{
+			std::ptrdiff_t width = to_apply.get_width();
+			std::ptrdiff_t height = to_apply.get_height();
 			int diff = (r_diff + g_diff + b_diff) / 3;
 #pragma omp parallel for
-			for (std::ptrdiff_t y = 0; y < static_cast<std::ptrdiff_t>(height); y++)
+			for (std::ptrdiff_t y = 0; y < height; y++)
 			{
-				auto* row = row_pointers[y];
-				for (std::ptrdiff_t x = 0; x < static_cast<std::ptrdiff_t>(width); x++)
+				auto* row = to_apply.get_row(y);
+				for (std::ptrdiff_t x = 0; x < width; x++)
 				{
 					auto& pix = row[x];
 					int dm = dither_matrix[(x & 0xFF) + (y & 0xFF) * 256];
