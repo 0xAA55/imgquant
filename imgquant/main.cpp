@@ -10,7 +10,7 @@ using namespace pngcpp;
 
 void usage(char *argv0)
 {
-    std::cout << "Usage:" << argv0 << " [--preserve-alpha] <input.png> <output.png>" << std::endl;
+    std::cout << "Usage:" << argv0 << " [--discard-alpha] <input.png> <output.png>" << std::endl;
 }
 
 extern"C" int main(int argc, char **argv)
@@ -21,7 +21,7 @@ extern"C" int main(int argc, char **argv)
         return 1;
     }
 
-    bool preserve_alpha = false;
+    bool discard_alpha = false;
     char *src_png_path = nullptr;
     char *out_png_path = nullptr;
     if (argc == 3)
@@ -36,9 +36,9 @@ extern"C" int main(int argc, char **argv)
             auto arg = argv[i];
             if (!memcmp("--", arg, 2))
             {
-                if (!strcmp(arg, "--preserve-alpha"))
+                if (!strcmp(arg, "--discard-alpha"))
                 {
-                    preserve_alpha = true;
+                    discard_alpha = true;
                 }
                 else
                 {
@@ -75,7 +75,7 @@ extern"C" int main(int argc, char **argv)
     {
         Bitmap<ColorRgba> src_png = std::move(PngImage(src_png_path).get_bmp());
             
-        if (!preserve_alpha)
+        if (discard_alpha)
         {
             std::vector<ColorRgb> palette_out;
             auto ibmp = rgb24to8::rgb24to8(src_png, palette_out);
