@@ -110,7 +110,7 @@ namespace dither
 			return dst;
 		}
 
-		Bitmap<int> ApplyAlphaDither(const Bitmap<uint8_t>& src) const;
+		Bitmap<uint8_t> ApplyAlphaDither(const Bitmap<ColorRgba>& src) const;
 		static void diffuse_error(int& target, int error, int numerator, int denominator);
 
 		QuantError get_quant_error(IColorRgb& src_pix, uint8_t dst_pix) const;

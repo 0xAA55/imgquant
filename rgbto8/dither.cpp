@@ -39,10 +39,20 @@ namespace dither
 	template Bitmap<uint8_t> Ditherer::ApplyDiffusion(const Bitmap<IColorRgb>& src) const;
 	template Bitmap<uint8_t> Ditherer::ApplyDiffusion(const Bitmap<IColorRgba>& src) const;
 
-	Bitmap<int> Ditherer::ApplyAlphaDither(const Bitmap<uint8_t>& src) const
+	Bitmap<uint8_t> Ditherer::ApplyAlphaDither(const Bitmap<ColorRgba>& src) const
 	{
-		auto ret = src.convert<int>([](uint8_t& a) -> int { return a; });
-		// TODO
+		auto ret = src.convert<uint8_t>([](const ColorRgba& c) -> uint8_t { return c.A; });
+#pragma omp parallel for
+		for (int y = 0; y < static_cast<int>(ret.get_height()); y++)
+		{
+			auto row = ret.get_row(y);
+			for (int x = 0; x < static_cast<int>(ret.get_width()); x++)
+			{
+				auto &pix = row[x];
+				if (pix > sample_matrix(x, y)) pix = 255;
+				else pix = 0;
+			}
+		}
 		return ret;
 	}
 	void Ditherer::diffuse_error(int& target, int error, int numerator, int denominator)
