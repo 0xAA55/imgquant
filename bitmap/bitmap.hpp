@@ -40,7 +40,7 @@ namespace bitmap
 		Bitmap(const Bitmap& copy) : Bitmap(copy.width, copy.height, copy.get_row_pointers())
 		{
 		}
-		Bitmap(Bitmap&& move) :
+		Bitmap(Bitmap&& move) noexcept :
 			bitmap(std::move(move.bitmap)),
 			row_pointers(std::move(move.row_pointers)),
 			pitch(move.pitch),
