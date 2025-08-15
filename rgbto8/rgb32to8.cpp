@@ -23,13 +23,9 @@ namespace rgb32to8
 		palette_gen.get_palette([](void *userdata, uint8_t r, uint8_t g, uint8_t b)
 			{
 				auto &palette = *static_cast<std::vector<ColorRgba>*>(userdata);
-				ColorRgba new_entry{};
-				new_entry.R = r;
-				new_entry.G = g;
-				new_entry.B = b;
-				palette.push_back(new_entry);
+				palette.push_back(ColorRgba{r, g, b, 255});
 			}, static_cast<void *>(&palette_out)
-				);
+		);
 		if (palette_out.size() < 256) palette_out.push_back(ColorRgba{ 0, 0, 0, 255 });
 		if (palette_out.size() < 256) palette_out.push_back(ColorRgba{ 255, 255, 255, 255 });
 		auto key_color_index = palette_out.size();
@@ -68,13 +64,13 @@ namespace rgb32to8
 				auto transparency = tns_row[x];
 				switch (transparency)
 				{
-				default:
-					throw std::runtime_error("Bad transparency value, must be 0 or 255.");
 				case 0:
 					dst_row[x] = static_cast<uint8_t>(key_color_index);
 					break;
 				case 255:
 					break;
+				default:
+					throw std::runtime_error("Bad transparency value, must be 0 or 255.");
 				}
 			}
 		}
