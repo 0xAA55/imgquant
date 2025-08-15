@@ -1,5 +1,3 @@
-#pragma once
-
 #include "coldef.hpp"
 
 namespace coldef
