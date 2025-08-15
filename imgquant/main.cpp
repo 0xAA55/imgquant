@@ -40,6 +40,10 @@ extern"C" int main(int argc, char **argv)
                 {
                     discard_alpha = true;
                 }
+                else if (!strcmp(arg, "--preserve-alpha"))
+                {
+                    discard_alpha = false;
+                }
                 else
                 {
                     std::cerr << "Unknown option `" << arg << "`." << std::endl;
