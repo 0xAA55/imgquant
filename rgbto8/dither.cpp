@@ -23,6 +23,11 @@ namespace dither
 		return ret;
 	}
 
+	int Ditherer::sample_matrix(int x, int y) const
+	{
+		return dither_matrix[static_cast<size_t>(x & 0xFF) + static_cast<size_t>(y & 0xFF) * 256];
+	}
+
 	template Ditherer::Ditherer(const std::vector<ColorRgb> &palette);
 	template Ditherer::Ditherer(const std::vector<ColorRgba> &palette);
 	template Bitmap<ColorRgb> Ditherer::ApplyOrdered(const Bitmap<ColorRgb>& src) const;

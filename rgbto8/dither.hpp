@@ -37,6 +37,8 @@ namespace dither
 	public:
 		Ditherer() = delete;
 
+		int sample_matrix(int x, int y) const;
+
 		template<typename T>
 		Ditherer(const std::vector<T> &palette) : palette_mapper(palette)
 		{
@@ -89,12 +91,11 @@ namespace dither
 			{
 				auto* src_row = src.get_row(y);
 				auto* dst_row = dst.get_row(y);
-				for (uint32_t x = 0; x < width; x++)
+				for (int x = 0; x < static_cast<int>(width); x++)
 				{
 					auto& src_pix = src_row[x];
 					auto& dst_pix = dst_row[x];
-					int dm = dither_matrix[(x & 0xFF) + (y & 0xFF) * 256];
-					dm = dm * diff / 128;
+					int dm = sample_matrix(x, y) * diff / 128;
 					for (size_t i = 0; i < std::min(size, static_cast<size_t>(3)); i++)
 					{
 						dst_pix[i] = static_cast<uint8_t>(std::max(std::min(static_cast<int>(src_pix[i]) + dm, 255), 0));
