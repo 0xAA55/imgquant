@@ -23,29 +23,29 @@ namespace dither
 		return ret;
 	}
 
-	template Ditherer::Ditherer(const std::vector<Color24> &palette);
-	template Ditherer::Ditherer(const std::vector<Color32> &palette);
-	template void Ditherer::ApplyOrdered(Bitmap<Color24>& to_apply) const;
-	template void Ditherer::ApplyOrdered(Bitmap<Color32>& to_apply) const;
-	template void Ditherer::ApplyDiffusion(uint32_t width, uint32_t height, const Color24*const* row_pointers, uint8_t **out_row_pointers);
-	template void Ditherer::ApplyDiffusion(uint32_t width, uint32_t height, const Color32*const* row_pointers, uint8_t **out_row_pointers);
+	template Ditherer::Ditherer(const std::vector<ColorRgb> &palette);
+	template Ditherer::Ditherer(const std::vector<ColorRgba> &palette);
+	template Bitmap<ColorRgb> Ditherer::ApplyOrdered(const Bitmap<ColorRgb>& src) const;
+	template Bitmap<ColorRgba> Ditherer::ApplyOrdered(const Bitmap<ColorRgba>& src) const;
+	template Bitmap<IColorRgb> Ditherer::ApplyOrdered(const Bitmap<ColorRgb>& src) const;
+	template Bitmap<IColorRgba> Ditherer::ApplyOrdered(const Bitmap<ColorRgba>& src) const;
+	template Bitmap<uint8_t> Ditherer::ApplyDiffusion(const Bitmap<ColorRgb>& src) const;
+	template Bitmap<uint8_t> Ditherer::ApplyDiffusion(const Bitmap<ColorRgba>& src) const;
+	template Bitmap<uint8_t> Ditherer::ApplyDiffusion(const Bitmap<IColorRgb>& src) const;
+	template Bitmap<uint8_t> Ditherer::ApplyDiffusion(const Bitmap<IColorRgba>& src) const;
 
-	void Ditherer::ApplyOrdered(uint32_t width, uint32_t height, uint8_t **row_pointers) const
+	Bitmap<int> Ditherer::ApplyAlphaDither(const Bitmap<uint8_t>& src) const
 	{
-#pragma omp parallel for
-		for (std::ptrdiff_t y = 0; y < static_cast<std::ptrdiff_t>(height); y++)
-		{
-			auto *row = row_pointers[y];
-			for (std::ptrdiff_t x = 0; x < static_cast<std::ptrdiff_t>(width); x++)
-			{
-				auto &pix = row[x];
-				int dm = dither_matrix[(x & 0xFF) + (y & 0xFF) * 256] + 128;
-				if (pix > dm) pix = 255;
-				else pix = 0;
-			}
-		}
+		auto ret = src.convert<int>([](uint8_t& a) -> int { return a; });
+		// TODO
+		return ret;
 	}
-	QuantError Ditherer::get_quant_error(QuantError & src_pix, uint8_t dst_pix) const
+	void Ditherer::diffuse_error(int& target, int error, int numerator, int denominator)
+	{
+		int diffuse = error * numerator / denominator;
+		target += diffuse;
+	}
+	QuantError Ditherer::get_quant_error(IColorRgb& src_pix, uint8_t dst_pix) const
 	{
 		auto& dst_col = palette[dst_pix];
 		return QuantError
@@ -55,7 +55,7 @@ namespace dither
 			src_pix.B - static_cast<int>(dst_col.B),
 		};
 	}
-	void Ditherer::diffuse_error(QuantError & target, QuantError & error, int numerator, int denominator)
+	void Ditherer::diffuse_error(IColorRgb& target, QuantError & error, int numerator, int denominator)
 	{
 		int R_diffuse = error.R * numerator / denominator;
 		int G_diffuse = error.G * numerator / denominator;

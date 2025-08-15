@@ -4,8 +4,9 @@
 #include <vector>
 #include <algorithm>
 
+#include <bitmap/bitmap.hpp>
+
 #include "rgb2i.hpp"
-#include "bitmap.hpp"
 
 namespace dither
 {
@@ -27,7 +28,7 @@ namespace dither
 
 		std::vector<int> dither_matrix;
 		Rgb2I palette_mapper;
-		std::vector<Color24> palette;
+		std::vector<ColorRgb> palette;
 
 		uint32_t r_diff = 0;
 		uint32_t g_diff = 0;
@@ -36,7 +37,7 @@ namespace dither
 	public:
 		Ditherer() = delete;
 
-		template<Rgb_c T>
+		template<typename T>
 		Ditherer(const std::vector<T> &palette) : palette_mapper(palette)
 		{
 			dither_matrix.resize(65536);
@@ -71,70 +72,72 @@ namespace dither
 
 			for (size_t i = 0; i < palette.size(); i++)
 			{
-				this->palette.push_back(Color24{ palette[i].R, palette[i].G, palette[i].B });
+				this->palette.push_back(ColorRgb{ palette[i].R, palette[i].G, palette[i].B });
 			}
 		}
 
-		template<Rgb_c Pixel>
-		void ApplyOrdered(Bitmap<Pixel>& to_apply) const
+		template<typename PixelSrc, typename PixelDst>
+		Bitmap<PixelDst> ApplyOrdered(const Bitmap<PixelSrc>& src) const
 		{
-			std::ptrdiff_t width = to_apply.get_width();
-			std::ptrdiff_t height = to_apply.get_height();
+			uint32_t width = src.get_width();
+			uint32_t height = src.get_height();
+			auto dst = Bitmap<PixelDst>(width, height);
 			int diff = (r_diff + g_diff + b_diff) / 3;
+			constexpr size_t size = std::min(PixelDst::size(), PixelSrc::size());
 #pragma omp parallel for
-			for (std::ptrdiff_t y = 0; y < height; y++)
+			for (int y = 0; y < static_cast<int>(height); y++)
 			{
-				auto* row = to_apply.get_row(y);
-				for (std::ptrdiff_t x = 0; x < width; x++)
+				auto* src_row = src.get_row(y);
+				auto* dst_row = dst.get_row(y);
+				for (uint32_t x = 0; x < width; x++)
 				{
-					auto& pix = row[x];
+					auto& src_pix = src_row[x];
+					auto& dst_pix = dst_row[x];
 					int dm = dither_matrix[(x & 0xFF) + (y & 0xFF) * 256];
 					dm = dm * diff / 128;
-					pix.R = static_cast<uint8_t>(std::max(std::min(static_cast<int>(pix.R) + dm, 255), 0));
-					pix.G = static_cast<uint8_t>(std::max(std::min(static_cast<int>(pix.G) + dm, 255), 0));
-					pix.B = static_cast<uint8_t>(std::max(std::min(static_cast<int>(pix.B) + dm, 255), 0));
+					for (size_t i = 0; i < std::min(size, static_cast<size_t>(3)); i++)
+					{
+						dst_pix[i] = static_cast<uint8_t>(std::max(std::min(static_cast<int>(src_pix[i]) + dm, 255), 0));
+					}
+					if (dst_pix.size() == 4)
+					{
+						if (src_pix.size() == 4) dst_pix[3] = src_pix[3];
+						else dst_pix[3] = 255;
+					}
 				}
 			}
+			return dst;
 		}
 
-		void ApplyOrdered(uint32_t width, uint32_t height, uint8_t **row_pointers) const;
-		QuantError get_quant_error(QuantError& src_pix, uint8_t dst_pix) const;
-		static void diffuse_error(QuantError &target, QuantError& error, int numerator, int denominator);
+		Bitmap<int> ApplyAlphaDither(const Bitmap<uint8_t>& src) const;
+		static void diffuse_error(int& target, int error, int numerator, int denominator);
 
-		template<Rgb_c Pixel>
-		void ApplyDiffusion(uint32_t width, uint32_t height, const Pixel*const* row_pointers, uint8_t **out_row_pointers)
+		QuantError get_quant_error(IColorRgb& src_pix, uint8_t dst_pix) const;
+		static void diffuse_error(IColorRgb &target, QuantError& error, int numerator, int denominator);
+
+		template<typename Pixel>
+		Bitmap<uint8_t> ApplyDiffusion(const Bitmap<Pixel>& src) const
 		{
-			auto canvas = std::vector<QuantError>();
-			auto canvas_row_ptr = std::vector<QuantError*>();
-			canvas.resize(static_cast<size_t>(width) * height);
-			canvas_row_ptr.resize(height);
-#pragma omp parallel for
-			for (std::ptrdiff_t y = 0; y < static_cast<std::ptrdiff_t>(height); y++)
+			uint32_t width = src.get_width();
+			uint32_t height = src.get_height();
+			auto canvas = src.convert<IColorRgb>([](Pixel& s) -> IColorRgb {
+				return IColorRgb{
+					s.R,
+					s.G,
+					s.B,
+				};
+			});
+			auto dst = Bitmap<uint8_t>(width, height);
+			for (uint32_t y = 0; y < height; y++)
 			{
-				canvas_row_ptr[y] = &canvas[y * width];
-				auto src_row = row_pointers[y];
-				auto dst_row = canvas_row_ptr[y];
-				for (size_t x = 0; x < width; x++)
-				{
-					auto &src_pix = src_row[x];
-					auto &dst_pix = dst_row[x];
-					dst_pix = QuantError{
-						src_pix.R,
-						src_pix.G,
-						src_pix.B
-					};
-				}
-			}
-			for (size_t y = 0; y < static_cast<size_t>(height); y++)
-			{
-				auto src_row = canvas_row_ptr[y];
-				auto dst_row = out_row_pointers[y];
-				bool is_last_line = (y == static_cast<size_t>(height) - 1);
-				auto src_row_2 = is_last_line ? canvas_row_ptr[y] : canvas_row_ptr[y + 1];
-				for (size_t x = 0; x < static_cast<size_t>(width); x++)
+				auto src_row = canvas.get_row(y);
+				auto dst_row = dst.get_row(y);
+				bool is_last_line = (y == height - 1);
+				auto src_row_2 = is_last_line ? canvas.get_row(y) : canvas.get_row(y + 1);
+				for (uint32_t x = 0; x < width; x++)
 				{
 					bool is_first_pix = (x == 0);
-					bool is_last_pix = (x == static_cast<size_t>(width) - 1);
+					bool is_last_pix = (x == width - 1);
 					auto &src_pix = src_row[x];
 					auto dst_pix = palette_mapper.get_color_index(
 						std::max(std::min(src_pix.R, 255), 0),
@@ -152,13 +155,18 @@ namespace dither
 					if (!is_last_pix) diffuse_error(src_row[x + 1], quant_error, 7, 16);
 				}
 			}
+			return dst;
 		}
 	};
 
-	extern template Ditherer::Ditherer(const std::vector<Color24> &palette);
-	extern template Ditherer::Ditherer(const std::vector<Color32> &palette);
-	extern template void Ditherer::ApplyOrdered(uint32_t width, uint32_t height, Color24 **row_pointers) const;
-	extern template void Ditherer::ApplyOrdered(uint32_t width, uint32_t height, Color32 **row_pointers) const;
-	extern template void Ditherer::ApplyDiffusion(uint32_t width, uint32_t height, const Color24*const* row_pointers, uint8_t **out_row_pointers);
-	extern template void Ditherer::ApplyDiffusion(uint32_t width, uint32_t height, const Color32*const* row_pointers, uint8_t **out_row_pointers);
+	extern template Ditherer::Ditherer(const std::vector<ColorRgb> &palette);
+	extern template Ditherer::Ditherer(const std::vector<ColorRgba> &palette);
+	extern template Bitmap<ColorRgb> Ditherer::ApplyOrdered(const Bitmap<ColorRgb>& src) const;
+	extern template Bitmap<ColorRgba> Ditherer::ApplyOrdered(const Bitmap<ColorRgba>& src) const;
+	extern template Bitmap<IColorRgb> Ditherer::ApplyOrdered(const Bitmap<ColorRgb>& src) const;
+	extern template Bitmap<IColorRgba> Ditherer::ApplyOrdered(const Bitmap<ColorRgba>& src) const;
+	extern template Bitmap<uint8_t> Ditherer::ApplyDiffusion(const Bitmap<ColorRgb>& src) const;
+	extern template Bitmap<uint8_t> Ditherer::ApplyDiffusion(const Bitmap<ColorRgba>& src) const;
+	extern template Bitmap<uint8_t> Ditherer::ApplyDiffusion(const Bitmap<IColorRgb>& src) const;
+	extern template Bitmap<uint8_t> Ditherer::ApplyDiffusion(const Bitmap<IColorRgba>& src) const;
 };
