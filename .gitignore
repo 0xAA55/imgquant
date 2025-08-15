@@ -7,7 +7,7 @@ lib/x86_Release/
 lib/x64_Release/
 *.filters
 *.user
-testout.png
+*out.png
 quant
 imgquant/imgquant
 *.a
