@@ -80,10 +80,10 @@ namespace dither
 #pragma omp parallel for
 			for (std::ptrdiff_t y = 0; y < static_cast<std::ptrdiff_t>(height); y++)
 			{
-				auto *row = row_pointers[y];
+				auto* row = row_pointers[y];
 				for (std::ptrdiff_t x = 0; x < static_cast<std::ptrdiff_t>(width); x++)
 				{
-					auto &pix = row[x];
+					auto& pix = row[x];
 					int dm = dither_matrix[(x & 0xFF) + (y & 0xFF) * 256];
 					dm = dm * diff / 128;
 					pix.R = static_cast<uint8_t>(std::max(std::min(static_cast<int>(pix.R) + dm, 255), 0));
