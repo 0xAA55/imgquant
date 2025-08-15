@@ -4,11 +4,11 @@
 #include <vector>
 #include <algorithm>
 
-#include "cubemapper.hpp"
+#include "rgb2i.hpp"
 
 namespace dither
 {
-	using namespace cubemapper;
+	using namespace rgb2i;
 
 	struct QuantError
 	{
@@ -24,7 +24,7 @@ namespace dither
 		static uint32_t bit_reverse(uint32_t v);
 
 		std::vector<int> dither_matrix;
-		CubeMapper palette_mapper;
+		Rgb2I palette_mapper;
 		std::vector<Color24> palette;
 
 		uint32_t r_diff = 0;

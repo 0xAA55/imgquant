@@ -6,14 +6,14 @@
 #include "paldef.hpp"
 #include "octree.hpp"
 #include "dither.hpp"
-#include "cubemapper.hpp"
+#include "rgb2i.hpp"
 
 namespace rgb24to8
 {
 	using namespace paldef;
 	using namespace octree;
 	using namespace dither;
-	using namespace cubemapper;
+	using namespace rgb2i;
 
 	template<Rgb_c T_pixel, Rgb_c T_palette>
 	void rgb24to8(uint32_t src_width, uint32_t src_height, T_pixel **src_row_pointers,
@@ -59,7 +59,6 @@ namespace rgb24to8
 		}
 
 		auto ditherer = Ditherer(palette_out);
-
 		ditherer.ApplyOrdered(src_width, src_height, src_row_pointers);
 		ditherer.ApplyDiffusion(src_width, src_height, src_row_pointers, &dst_row_pointers[0]);
 

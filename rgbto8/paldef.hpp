@@ -12,6 +12,14 @@ namespace paldef
 		t.B;
 	};
 
+	template<typename T> concept Rgba_c = requires(T t)
+	{
+		t.R;
+		t.G;
+		t.B;
+		t.A;
+	};
+
 #pragma pack(push, 1)
 	struct Color24
 	{
