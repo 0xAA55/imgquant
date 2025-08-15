@@ -54,13 +54,30 @@ namespace rgb32to8
 			});
 		}
 
-		auto alpha_map = src.convert<uint8_t>([](ColorRgba& src) -> uint8_t {
-			return src.A;
-		});
-
 		auto ditherer = Ditherer(rgb_palette);
 		auto ordered = ditherer.ApplyOrdered<ColorRgba, IColorRgba>(src);
 		auto diffused = ditherer.ApplyDiffusion(ordered);
+		auto alpha_map = ditherer.ApplyAlphaDither(src);
+#pragma omp parallel for
+		for (int y = 0; y < static_cast<int>(diffused.get_height()); y++)
+		{
+			auto tns_row = alpha_map.get_row(y);
+			auto dst_row = diffused.get_row(y);
+			for (int x = 0; x < static_cast<int>(diffused.get_width()); x++)
+			{
+				auto transparency = tns_row[x];
+				switch (transparency)
+				{
+				default:
+					throw std::runtime_error("Bad transparency value, must be 0 or 255.");
+				case 0:
+					dst_row[x] = static_cast<uint8_t>(key_color_index);
+					break;
+				case 255:
+					break;
+				}
+			}
+		}
 
 		return diffused;
 	}
