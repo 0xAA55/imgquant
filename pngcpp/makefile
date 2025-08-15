@@ -1,4 +1,4 @@
-CXXFLAGS=-std=c++20 -O3 -flto
+CXXFLAGS=-I.. -std=c++20 -O3 -flto
 
 all: libpngcpp.a
 
