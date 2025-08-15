@@ -16,7 +16,7 @@ Compile first.
   * Run `make -j` to get the executable `quant`
   * Run `./quant _your_PNG_file_.png _output_file_.png`
 
-Optional parameter: `--preserve-alpha`, if used, will preserve the alpha channel.
+Optional parameter: `--discard-alpha`, if used, will discard the alpha channel.
 
 ## Compression Algorithm
 
@@ -29,6 +29,6 @@ Optional parameter: `--preserve-alpha`, if used, will preserve the alpha channel
 ## Compression Capability
 
 * RGB images are compressed to within one-third of their original size.
-* RGBA images have their transparency channel discarded, resulting in a compression of less than one-quarter their original size.
-  * Using `--preserve-alpha` will generate an image with the alpha channel dithered and the volume compressed to less than a quarter.
+* The alpha channel of an RGBA image will be included in the dithering calculation, and the volume will be compressed to less than a quarter.
+  * Use `--discard-alpha` to discard the alpha channel data, and the volume will be compressed to less than a quarter.
 * Generally, compression is most pronounced for bitmaps with fewer colors.
