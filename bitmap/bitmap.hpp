@@ -38,55 +38,18 @@ namespace bitmap
 		Bitmap(uint32_t width, uint32_t height, const T& default_color);
 		Bitmap(uint32_t width, uint32_t height, const T*const* from_row_pointers);
 
-		T* get_bitmap()
-		{
-			return bitmap;
-		}
-		const T* get_bitmap() const
-		{
-			return bitmap;
-		}
-		T** get_row_pointers()
-		{
-			return &row_pointers[0];
-		}
-		const T*const* get_row_pointers() const
-		{
-			return &row_pointers[0];
-		}
-		T* get_row(size_t y)
-		{
-			return row_pointers[y];
-		}
-		const T* get_row(size_t y) const
-		{
-			return row_pointers[y];
-		}
-		T& get_pixel(uint32_t x, uint32_t y)
-		{
-			return row_pointers[y][x];
-		}
-		const T& get_pixel(uint32_t x, uint32_t y) const
-		{
-			return row_pointers[y][x];
-		}
-		void set_pixel(uint32_t x, uint32_t y, const T& v)
-		{
-			row_pointers[y][x] = v;
-		}
-
-		uint32_t get_width() const
-		{
-			return width;
-		}
-		uint32_t get_height() const
-		{
-			return height;
-		}
-		size_t get_pitch() const
-		{
-			return pitch;
-		}
+		T* get_bitmap();
+		const T* get_bitmap() const;
+		T** get_row_pointers();
+		const T*const* get_row_pointers() const;
+		T* get_row(size_t y);
+		const T* get_row(size_t y) const;
+		T& get_pixel(uint32_t x, uint32_t y);
+		const T& get_pixel(uint32_t x, uint32_t y) const;
+		void set_pixel(uint32_t x, uint32_t y, const T& v);
+		uint32_t get_width() const;
+		uint32_t get_height() const;
+		size_t get_pitch() const;
 
 		template<typename T_dst>
 		Bitmap<T_dst> convert(T_dst(*convert_fn)(T& src)) const;

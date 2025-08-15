@@ -117,6 +117,67 @@ namespace bitmap
 	}
 
 	template<typename T>
+	T* Bitmap<T>::get_bitmap()
+	{
+		return bitmap;
+	}
+	template<typename T>
+	const T* Bitmap<T>::get_bitmap() const
+	{
+		return bitmap;
+	}
+	template<typename T>
+	T** Bitmap<T>::get_row_pointers()
+	{
+		return &row_pointers[0];
+	}
+	template<typename T>
+	const T*const* Bitmap<T>::get_row_pointers() const
+	{
+		return &row_pointers[0];
+	}
+	template<typename T>
+	T* Bitmap<T>::get_row(size_t y)
+	{
+		return row_pointers[y];
+	}
+	template<typename T>
+	const T* Bitmap<T>::get_row(size_t y) const
+	{
+		return row_pointers[y];
+	}
+	template<typename T>
+	T& Bitmap<T>::get_pixel(uint32_t x, uint32_t y)
+	{
+		return row_pointers[y][x];
+	}
+	template<typename T>
+	const T& Bitmap<T>::get_pixel(uint32_t x, uint32_t y) const
+	{
+		return row_pointers[y][x];
+	}
+	template<typename T>
+	void Bitmap<T>::set_pixel(uint32_t x, uint32_t y, const T& v)
+	{
+		row_pointers[y][x] = v;
+	}
+	template<typename T>
+	uint32_t Bitmap<T>::get_width() const
+	{
+		return width;
+	}
+	template<typename T>
+	uint32_t Bitmap<T>::get_height() const
+	{
+		return height;
+	}
+	template<typename T>
+	size_t Bitmap<T>::get_pitch() const
+	{
+		return pitch;
+	}
+
+	template<typename T>
 	Bitmap<T>::~Bitmap()
 	{
 		free(bitmap);
