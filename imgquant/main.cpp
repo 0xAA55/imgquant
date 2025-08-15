@@ -1,6 +1,6 @@
 ﻿
 #include <pngcpp/pngcpp.hpp>
-#include <rgb24to8/rgb24to8.hpp>
+#include <rgbto8/rgb24to8.hpp>
 
 #include <iostream>
 #include <cstring>

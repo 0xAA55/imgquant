@@ -12,4 +12,4 @@ clean:
 	rm -f quant
 	make -C imgquant clean
 	make -C pngcpp clean
-	make -C rgb24to8 clean
+	make -C rgbto8 clean

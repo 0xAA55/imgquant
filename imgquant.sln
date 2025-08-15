@@ -21,7 +21,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pngcpp", "pngcpp\pngcpp.vcx
 		{641A8336-4C8E-4A97-8D45-5FBDE8314AB7} = {641A8336-4C8E-4A97-8D45-5FBDE8314AB7}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rgb24to8", "rgb24to8\rgb24to8.vcxproj", "{0A93EE5E-F663-4FBC-B396-DDB7C100097B}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rgbto8", "rgbto8\rgbto8.vcxproj", "{0A93EE5E-F663-4FBC-B396-DDB7C100097B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
